@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+
+@theme {
+  --color-base-sidebar-background: #18181B;
+  --color-base-sidebar-foreground: #F4F4F5;
+  --color-base-muted-foreground: #A1A1AA;
+  --color-base-background: #09090B;
+  --color-base-foreground: #FAFAFA;
+  --color-base-border: #27272A;
+  --color-base-input: #27272A;
+  --color-base-secondary-foreground: #FAFAFA;
+  --color-base-secondary: #27272A;
+  --color-base-primary-foreground: #18181B;
+  --color-base-sidebar-accent: #27272A;
+
+}
