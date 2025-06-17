@@ -232,7 +232,7 @@ function ActiveCalculation() {
             </div>
             <div className="w-2 flex justify-start items-center">
               <div className="w-0 h-3.5 relative">
-                <div className="w-0 h-3.5 left-0 top-0 absolute outline outline-1 outline-offset-[-0.50px] outline-base-border" />
+                <div className="w-0 h-3.5 left-0 top-0 absolute outline  outline-offset-[-0.50px] outline-base-border" />
               </div>
             </div>
             <div
@@ -275,7 +275,7 @@ function ActiveCalculation() {
               <div
                 data-state="Default"
                 data-variant="Secondary"
-                className="px-2.5 py-0.5 bg-base-secondary rounded-full outline outline-1 outline-offset-[-1px] outline-tailwind-colors-base-transparent/0 flex justify-center items-center gap-2.5"
+                className="px-2.5 py-0.5 bg-base-secondary rounded-full outline  outline-offset-[-1px] outline-tailwind-colors-base-transparent/0 flex justify-center items-center gap-2.5"
               >
                 <div className="justify-start text-base-secondary-foreground text-xs font-semibold font-['Inter'] leading-none">
                   3
@@ -289,7 +289,7 @@ function ActiveCalculation() {
             data-size="default"
             data-state="Default"
             data-variant="Outline"
-            className="h-10 px-4 py-2 bg-base-background rounded-md outline outline-1 outline-offset-[-1px] outline-lime-400 flex justify-center items-center gap-2"
+            className="h-10 px-4 py-2 bg-base-background rounded-md outline  outline-offset-[-1px] outline-lime-400 flex justify-center items-center gap-2"
           >
             <div className="w-4 h-4 relative overflow-hidden">
               {/* <div className="w-2.5 h-2.5 left-[3.33px] top-[3.33px] absolute outline outline-[1.33px] outline-offset-[-0.67px] outline-lime-400" /> */}
@@ -306,13 +306,13 @@ function ActiveCalculation() {
               <div className="justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
                 Report Name:
               </div>
-              <div className="flex-1 px-3 py-2 bg-white/5 rounded-lg outline outline-1 outline-offset-[-1px] outline-white/20 flex justify-start items-center gap-2">
+              <div className="flex-1 px-3 py-2 bg-white/5 rounded-lg outline  outline-offset-[-1px] outline-white/20 flex justify-start items-center gap-2">
                 <div className="flex-1 justify-start text-gray-300/40 text-base font-medium font-['Plus_Jakarta_Sans'] leading-tight">
                   [Company Name] Carbon Assessment - [Date]
                 </div>
               </div>
             </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline outline-1 outline-offset-[-1px] outline-base-border inline-flex justify-end items-center gap-3">
+            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-end items-center gap-3">
               <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
                 <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
                   Energy Consumption
@@ -328,7 +328,7 @@ function ActiveCalculation() {
                 data-size="sm"
                 data-state="Default"
                 data-variant="Outline"
-                className="h-9 px-3 py-2 bg-base-background rounded-md outline outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
+                className="h-9 px-3 py-2 bg-base-background rounded-md outline  outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
               >
                 <div className="w-4 h-4 relative overflow-hidden">
                   {/* <div className="w-2.5 h-2.5 left-[3.33px] top-[3.33px] absolute bg-base-foreground" /> */}
@@ -339,7 +339,7 @@ function ActiveCalculation() {
                 </div>
               </div>
             </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline outline-1 outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
+            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
               <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
                 <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
                   Transportation & Travel
@@ -355,7 +355,7 @@ function ActiveCalculation() {
                 data-size="sm"
                 data-state="Default"
                 data-variant="Outline"
-                className="h-9 px-3 py-2 bg-base-background rounded-md outline outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
+                className="h-9 px-3 py-2 bg-base-background rounded-md outline  outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
               >
                 <div className="w-4 h-4 relative overflow-hidden">
                   {/* <div className="w-2.5 h-2.5 left-[3.33px] top-[3.33px] absolute bg-base-foreground" /> */}
@@ -366,7 +366,7 @@ function ActiveCalculation() {
                 </div>
               </div>
             </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline outline-1 outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
+            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
               <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
                 <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
                   Resource Consumption
@@ -382,7 +382,7 @@ function ActiveCalculation() {
                 data-size="sm"
                 data-state="Default"
                 data-variant="Outline"
-                className="h-9 px-3 py-2 bg-base-background rounded-md outline outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
+                className="h-9 px-3 py-2 bg-base-background rounded-md outline  outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
               >
                 <div className="w-4 h-4 relative overflow-hidden">
                   {/* <div className="w-2.5 h-2.5 left-[3.33px] top-[3.33px] absolute bg-base-foreground" /> */}
@@ -429,7 +429,7 @@ function ActiveCalculation() {
               <div
                 data-state="Default"
                 data-variant="Secondary"
-                className="px-2.5 py-0.5 bg-base-secondary rounded-full outline outline-1 outline-offset-[-1px] outline-tailwind-colors-base-transparent/0 flex justify-center items-center gap-2.5"
+                className="px-2.5 py-0.5 bg-base-secondary rounded-full outline  outline-offset-[-1px] outline-tailwind-colors-base-transparent/0 flex justify-center items-center gap-2.5"
               >
                 <div className="justify-start text-base-secondary-foreground text-xs font-semibold font-['Inter'] leading-none">
                   Live Preview
@@ -466,7 +466,7 @@ function ActiveCalculation() {
           data-orientation="Vertical"
           className="self-stretch h-[100px] origin-top-left rotate-90 inline-flex justify-start items-center gap-2.5"
         >
-          <div className="w-0 self-stretch origin-top-left rotate-90 outline outline-1 outline-offset-[-0.50px] outline-base-border"></div>
+          <div className="w-0 self-stretch origin-top-left rotate-90 outline  outline-offset-[-0.50px] outline-base-border"></div>
         </div> */}
         <div className="w-full max-w-[1280px] p-6 inline-flex justify-end items-start gap-4">
           <div
@@ -475,7 +475,7 @@ function ActiveCalculation() {
             data-size="default"
             data-state="Default"
             data-variant="Outline"
-            className="h-10 px-4 py-2 bg-base-background rounded-md outline outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
+            className="h-10 px-4 py-2 bg-base-background rounded-md outline  outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
           >
             <div className="justify-center text-base-foreground text-sm font-medium font-['Inter'] leading-tight">
               Save for Later
