@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.icon16 {
+  width: 16px;
+  height: 16px;
+}
 
 @theme {
   --color-base-sidebar-background: #18181B;
