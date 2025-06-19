@@ -1,62 +1,73 @@
-import React from "react";
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
+
 import { cn } from "@/lib/utils";
 
-/**
- * @typedef {"Default" | "DefaultOutlined" | "Secondary" | "SecondaryOutlined"} ButtonVariant
- */
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-lime-400 border border-lime-400 text-base-primary-foreground shadow-xs hover:bg-lime-400/90",
+        defaultOutlined:
+          "bg-tailwind-transparent/0 border border-lime-400 text-lime-400 hover:bg-lime-400 hover:text-base-primary-foreground",
+        secondary:
+          "bg-base-secondary border border-base-secondary text-base-secondary-foreground hover:bg-base-secondary/80 hover:border-base-secondary/80",
+        secondaryOutlined:
+          "bg-tailwind-colors-base-transparent/0 border border-base-input text-base-foreground hover:bg-base-input/80 hover:border-base-input/80",
+        // destructive:
+        //   "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        // outline:
+        //   "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        // secondary:
+        //   "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        // link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
 
-/**
- * @param {{
- *   title?: string,
- *   LeftIcon?: React.ElementType | null,
- *   variant?: ButtonVariant
- * }} props
- */
-function Button({ title = "Button", LeftIcon = null, variant = "Default", onClick=()=>{}, className=""}) {
-  // Style mapping for each variant
-  const variantStyles = {
-    Default: {
-      bg: "bg-lime-400",
-      border: "border border-lime-400",
-      text: "text-base-primary-foreground",
-      icon: "text-base-primary-foreground",
-    },
-    DefaultOutlined: {
-      bg: "bg-base-background",
-      border: "outline outline-1 outline-lime-400",
-      text: "text-lime-400",
-      icon: "text-lime-400",
-    },
-    Secondary: {
-      bg: "bg-base-secondary",
-      border: "",
-      text: "text-base-secondary-foreground",
-      icon: "text-base-secondary-foreground",
-    },
-    SecondaryOutlined: {
-      bg: "bg-tailwind-colors-base-transparent/0",
-      border: "outline outline-1 outline-base-input",
-      text: "text-base-foreground",
-      icon: "text-base-foreground",
-    },
-  };
-  const styles = variantStyles[variant] || variantStyles.Default;
+function Button({ className, variant, size, asChild = false, ...props }) {
+  const Comp = asChild ? Slot : "button";
+
   return (
-    <button
-      className={cn(`h-10 px-4 py-2 rounded-md flex justify-center items-center gap-2 font-['Inter'] text-sm font-medium leading-tight ${styles.bg} ${styles.border}`, className)}
-      type="button"
-      onClick={onClick}
-    >
-      {LeftIcon && (
-        <span
-          className={`w-4 h-4 relative overflow-hidden flex items-center justify-center`}
-        >
-          <LeftIcon className={`${styles.icon} icon16`} />
-        </span>
+    <Comp
+      data-slot="button"
+      className={cn(
+        "font-['Inter']",
+        buttonVariants({ variant, size, className })
       )}
-      <span className={`justify-center ${styles.text}`}>{title}</span>
-    </button>
+      {...props}
+    />
   );
 }
 
-export default Button;
+function IconButton({ Icon, children, ...props }) {
+  const IconComp = (
+    <span
+      className={`w-4 h-4 overflow-hidden flex items-center justify-center`}
+    >
+      <div className="w-4 h-4 relative">
+        <Icon className={`icon16`} />
+      </div>
+    </span>
+  );
+  console.log(children)
+  return <Button children={[IconComp, ...(children ? React.Children.toArray(children) : [])]} {...props} className={"px-3 py-3"} />;
+}
+
+export { Button, buttonVariants, IconButton };

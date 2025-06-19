@@ -1,6 +1,6 @@
 import React from "react";
 
-import Button from "./Button";
+import {Button} from "@/Components/ui/button";
 import useBooleanSelector from "@/hooks/useBooleanSelector";
 
 /**
@@ -23,7 +23,7 @@ function ToggleGroup({ options, selected }) {
   return (
     <div className="w-40 flex justify-start items-center gap-1">
       {Array.from({ length: options.length }).map((_, i) => (
-        <Button className={"w-20"} title={options.at(i)} variant={selectedIndex == i ? "Secondary" : "SecondaryOutlined"} onClick={()=>setSelected(i+1)}/>
+        <Button className={"w-20"} variant={selectedIndex == i ? "secondary" : "secondaryOutlined"} onClick={()=>setSelected(i+1)}>{options.at(i)}</Button>
       ))}
     </div>
   );

@@ -2,7 +2,7 @@ import React from 'react'
 import {PanelLeftIcon, ChevronRightIcon, PlusIcon, SparklesIcon} from 'lucide-react'
 import Breadcrumb from './ui/Breadcrumb'
 import Tab from './ui/Tab'
-import Button from './ui/Button'
+import {Button, IconButton} from './ui/Button'
 
 function CarbonCalculator() {
   return (
@@ -13,7 +13,7 @@ function CarbonCalculator() {
             <Tab title='Active Calculation' active/>
             <Tab title='Saved Drafts' count={3}/>
           </div>
-          <Button title='New Calculation' LeftIcon={PlusIcon} variant='DefaultOutlined'/>
+          <IconButton Icon={PlusIcon} variant='defaultOutlined'>New Calculation</IconButton>
         </div>
         <div className="w-full max-w-[1280px] p-6 inline-flex justify-start items-start gap-6 flex-wrap content-start">
           <div className="flex-1 max-w-[680px] min-w-96 inline-flex flex-col justify-start items-start gap-4">
@@ -37,7 +37,7 @@ function CarbonCalculator() {
                   your operations.
                 </div>
               </div>
-              <Button title="Add Details" LeftIcon={PlusIcon} variant='SecondaryOutlined'/>
+              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
             </div>
             <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
               <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
@@ -49,7 +49,7 @@ function CarbonCalculator() {
                   commuting data.
                 </div>
               </div>
-              <Button title="Add Details" LeftIcon={PlusIcon} variant='SecondaryOutlined'/>
+              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
             </div>
             <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
               <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
@@ -61,7 +61,7 @@ function CarbonCalculator() {
                   practices.
                 </div>
               </div>
-              <Button title="Add Details" LeftIcon={PlusIcon} variant='SecondaryOutlined'/>
+              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
             </div>
             <div className="self-stretch py-4 rounded-2xl inline-flex justify-start items-center gap-3">
               <div className="flex-1 px-2 inline-flex flex-col justify-start items-start gap-1">
@@ -73,7 +73,7 @@ function CarbonCalculator() {
                   practices.
                 </div>
               </div>
-              <Button title="Get Smart Defaults" LeftIcon={SparklesIcon} variant='Secondary'/>
+              <IconButton Icon={SparklesIcon} variant='secondary'>Get Smart Defaults</IconButton>
             </div>
           </div>
           <div className="flex-1 max-w-[480px] min-w-96 pl-6 border-l inline-flex flex-col justify-start items-center gap-6">
@@ -118,8 +118,8 @@ function CarbonCalculator() {
           </div>
         </div>
         <div className="w-full max-w-[1280px] p-6 inline-flex justify-end items-start gap-4">
-          <Button title="Save for Later" variant='SecondaryOutlined'/>
-          <Button title="Generate Intelligence Report"/>
+          <Button variant='secondaryOutlined'>Save for Later</Button>
+          <Button>Generate Intelligence Report</Button>
         </div>
       </div>
   )

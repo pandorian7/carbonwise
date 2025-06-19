@@ -2,6 +2,8 @@ import React from "react";
 
 import { XIcon } from "lucide-react";
 
+import { Button, IconButton } from "../button";
+
 function Model({ title, children, description }) {
   return (
     <div className="w-full max-w-[780px] bg-base-sidebar-background rounded-[20px] inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
@@ -10,10 +12,11 @@ function Model({ title, children, description }) {
           {title}
         </div>
         <div className="w-10 h-10 px-4 py-2 bg-base-background rounded-md outlineoutline-offset-[-1px] outline-base-input flex justify-center items-center gap-2">
-          <div className="w-4 h-4 relative">
-            <XIcon className="text-base-foreground icon16" />
+            <IconButton Icon={XIcon} variant={"ghost"}/>
+          {/* <div className="w-4 h-4 relative"> */}
+            {/* <XIcon className="text-base-foreground icon16" /> */}
             {/* <div className="w-2 h-2 left-[3.76px] top-[3.76px] absolute bg-base-foreground" /> */}
-          </div>
+          {/* </div> */}
         </div>
       </div>
 
@@ -28,30 +31,8 @@ function Model({ title, children, description }) {
         {children}
       </div>
       <div className="self-stretch p-4 bg-base-background inline-flex justify-end items-center gap-2">
-        <div
-          data-show-left-icon="false"
-          data-show-right-icon="false"
-          data-size="default"
-          data-state="Default"
-          data-variant="Outline"
-          className="h-10 px-4 py-2 bg-base-background rounded-md outline outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2"
-        >
-          <div className="justify-center text-base-foreground text-sm font-medium font-['Inter'] leading-tight">
-            Complete Later
-          </div>
-        </div>
-        <div
-          data-show-left-icon="false"
-          data-show-right-icon="false"
-          data-size="default"
-          data-state="Default"
-          data-variant="Default"
-          className="h-10 px-4 py-2 bg-lime-400 rounded-md flex justify-center items-center gap-2"
-        >
-          <div className="justify-center text-base-primary-foreground text-sm font-medium font-['Inter'] leading-tight">
-            Save & Continue
-          </div>
-        </div>
+        <Button size={'lg'} variant={'secondaryOutlined'}>Complete Later</Button>
+        <Button size={'lg'}>Save & Continue</Button>
       </div>
     </div>
   );
