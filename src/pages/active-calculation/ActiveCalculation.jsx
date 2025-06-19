@@ -3,6 +3,7 @@ import React from "react";
 import Sidebar from "../../Components/Sidebar";
 import CarbonCalculator from "../../Components/CarbonCalculator";
 import useBooleanSelector from "../../hooks/useBooleanSelector";
+import Dashboard from "../dashboard/Dashboard";
 
 function ActiveCalculation() {
   const [
@@ -16,7 +17,11 @@ function ActiveCalculation() {
   ] = useBooleanSelector(5, 1);
   return (
     <div className="w-full h-[100vh] px-2 pt-2 bg-base-sidebar-background inline-flex justify-start items-start overflow-hidden">
-      <Sidebar activeView={activeView} changeView={(n)=>(()=>changeView(n))}/>
+      <Sidebar
+        activeView={activeView}
+        changeView={(n) => () => changeView(n)}
+      />
+      {dashboard && <Dashboard />}
       {calculator && <CarbonCalculator />}
     </div>
   );
