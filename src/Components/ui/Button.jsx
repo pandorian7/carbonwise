@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * @typedef {"Default" | "DefaultOutlined" | "Secondary" | "SecondaryOutlined"} ButtonVariant
@@ -11,7 +12,7 @@ import React from "react";
  *   variant?: ButtonVariant
  * }} props
  */
-function Button({ title = "Button", LeftIcon = null, variant = "Default" }) {
+function Button({ title = "Button", LeftIcon = null, variant = "Default", onClick=()=>{}, className=""}) {
   // Style mapping for each variant
   const variantStyles = {
     Default: {
@@ -33,7 +34,7 @@ function Button({ title = "Button", LeftIcon = null, variant = "Default" }) {
       icon: "text-base-secondary-foreground",
     },
     SecondaryOutlined: {
-      bg: "bg-base-background",
+      bg: "bg-tailwind-colors-base-transparent/0",
       border: "outline outline-1 outline-base-input",
       text: "text-base-foreground",
       icon: "text-base-foreground",
@@ -42,8 +43,9 @@ function Button({ title = "Button", LeftIcon = null, variant = "Default" }) {
   const styles = variantStyles[variant] || variantStyles.Default;
   return (
     <button
-      className={`h-10 px-4 py-2 rounded-md flex justify-center items-center gap-2 font-['Inter'] text-sm font-medium leading-tight ${styles.bg} ${styles.border}`}
+      className={cn(`h-10 px-4 py-2 rounded-md flex justify-center items-center gap-2 font-['Inter'] text-sm font-medium leading-tight ${styles.bg} ${styles.border}`, className)}
       type="button"
+      onClick={onClick}
     >
       {LeftIcon && (
         <span
