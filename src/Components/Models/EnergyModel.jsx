@@ -4,14 +4,14 @@ import TickScale from "../ui/model/TickScale";
 import { Input } from "../ui/input";
 import ToggleGroup from "../ui/ToggleGroup";
 
-function EnergyModel() {
+function EnergyModel({onClose}) {
   const description =
     "Energy typically represents 30-45% of a business's carbon footprint\
             and offers significant cost-saving potential. Provide as many\
             details as available—estimates are perfectly acceptable.";
 
   return (
-    <Model title={"Energy Consumption Details"} description={description}>
+    <Model title={"Energy Consumption Details"} description={description} onClose={onClose}>
       <ModelEntry title={"Electricity Usage (monthly) :"}>
         <TickScale />
         <ModelEntryContainer>

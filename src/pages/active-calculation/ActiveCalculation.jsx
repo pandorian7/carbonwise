@@ -5,6 +5,7 @@ import CarbonCalculator from "../../Components/CarbonCalculator";
 import useBooleanSelector from "../../hooks/useBooleanSelector";
 import Dashboard from "../dashboard/Dashboard";
 
+
 function ActiveCalculation() {
   const [
     dashboard,
@@ -15,6 +16,7 @@ function ActiveCalculation() {
     changeView,
     activeView,
   ] = useBooleanSelector(5, 1);
+
   return (
     <div className="w-full h-[100vh] px-2 pt-2 bg-base-sidebar-background inline-flex justify-start items-start overflow-hidden">
       <Sidebar

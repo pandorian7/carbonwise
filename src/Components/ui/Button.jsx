@@ -58,7 +58,7 @@ function Button({ className, variant, size, asChild = false, ...props }) {
 
 function IconButton({ Icon, children, ...props }) {
   const IconComp = (
-    <span
+    <span key="icon"
       className={`w-4 h-4 overflow-hidden flex items-center justify-center`}
     >
       <div className="w-4 h-4 relative">
@@ -66,7 +66,6 @@ function IconButton({ Icon, children, ...props }) {
       </div>
     </span>
   );
-  console.log(children)
   return <Button children={[IconComp, ...(children ? React.Children.toArray(children) : [])]} {...props} className={"px-3 py-3"} />;
 }
 
