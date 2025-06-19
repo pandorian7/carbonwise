@@ -17,7 +17,7 @@ function ActiveCalculation() {
   return (
     <div className="w-full h-[100vh] px-2 pt-2 bg-base-sidebar-background inline-flex justify-start items-start overflow-hidden">
       <Sidebar activeView={activeView} changeView={(n)=>(()=>changeView(n))}/>
-      {dashboard && <CarbonCalculator />}
+      {calculator && <CarbonCalculator />}
     </div>
   );
 }
