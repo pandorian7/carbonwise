@@ -1,8 +1,9 @@
 import React from "react";
 
-function Tab({ title = "Tab", active = false, count = 0 }) {
+function Tab({ title = "Tab", active = false, count = 0, onClick = ()=>{} }) {
   return (
     <div
+      onClick={onClick}
       className={`px-4 py-6 flex justify-center items-center group transition duration-150 ${count ? "gap-2": ""} ${
         active ? "border-b-[3px] border-white" : "hover:border-b-[1px] hover:border-white"
       }`}
