@@ -31,6 +31,8 @@ const Overlay = forwardRef(({ children }, ref) => {
       style={{
         backgroundColor: "rgba(255, 255, 255, 0.20)",
         position: "fixed",
+        top:0,
+        left: 0,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
