@@ -45,7 +45,7 @@ function CarbonCalculator() {
 
   return (
     <>
-      <div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6 overflow-hidden">
+      <div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6">
         <div className="flex-1 flex justify-start items-center gap-2">
           <Tab title="Active Calculation" {...addBehaviour(1)} />
           <Tab title="Saved Drafts" count={3} {...addBehaviour(2)} />
