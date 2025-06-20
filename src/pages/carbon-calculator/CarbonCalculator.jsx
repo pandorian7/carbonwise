@@ -5,10 +5,12 @@ import { Button, IconButton } from "../../Components/ui/Button";
 import ActiveCalculation from "./ActiveCalculation";
 import SavedDrafts from "./SavedDrafts";
 import useBooleanSelector from "@/hooks/useBooleanSelector";
-import EnergyModel from "@/Components/Models/EnergyModel";
 import Overlay from "@/Components/ui/Overlay";
 import { useRef } from "react";
+
+import EnergyModel from "@/Components/Models/EnergyModel";
 import TranspotationModel from "@/Components/Models/TranspotationModel";
+import ResourceConsumptionModel from "@/Components/Models/ResourceConsumptionModel";
 
 const Models = () => {
   const overlayRef = useRef(null);
@@ -25,6 +27,7 @@ const Models = () => {
       <div className="p-6 w-full gap-2 flex">
         <ModelBtn Model={EnergyModel}>Energy</ModelBtn>
         <ModelBtn Model={TranspotationModel}>Transpotation</ModelBtn>
+        <ModelBtn Model={ResourceConsumptionModel}>Resource Consumption</ModelBtn>
       </div>
     </>
   );
