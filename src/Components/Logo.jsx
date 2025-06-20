@@ -1,0 +1,31 @@
+import React from 'react'
+
+function Logo() {
+  return (
+    <div className="self-stretch p-2 rounded-md inline-flex justify-start items-center gap-1">
+          <svg
+            width="27"
+            height="26"
+            viewBox="0 0 27 26"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.6667 1.33325V24.6666M21.9162 4.75034L5.41709 21.2495M25.3333 12.9999H2M21.9162 21.2495L5.41709 4.75034"
+              stroke="#C1F17E"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          <div className="flex-1 inline-flex flex-col justify-center items-start gap-0.5">
+            <div className="self-stretch justify-start text-lime-300 text-2xl font-semibold font-['Inter'] leading-normal">
+              CarbonWise
+            </div>
+          </div>
+        </div>
+  )
+}
+
+export default Logo
