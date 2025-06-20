@@ -1,126 +1,69 @@
-import React from 'react'
-import {PlusIcon, SparklesIcon} from 'lucide-react'
-import Tab from '../../Components/ui/Tab'
-import {Button, IconButton} from '../../Components/ui/Button'
+import React from "react";
+import { PlusIcon } from "lucide-react";
+import Tab from "../../Components/ui/Tab";
+import { Button, IconButton } from "../../Components/ui/Button";
+import ActiveCalculation from "./ActiveCalculation";
+import SavedDrafts from "./SavedDrafts";
+import useBooleanSelector from "@/hooks/useBooleanSelector";
+import Overlay from "@/Components/ui/Overlay";
+import { useRef } from "react";
+
+import EnergyModel from "@/Components/Models/EnergyModel";
+import TranspotationModel from "@/Components/Models/TranspotationModel";
+import ResourceConsumptionModel from "@/Components/Models/ResourceConsumptionModel";
+
+const Models = () => {
+  const overlayRef = useRef(null);
+
+  const showModel = (model) => overlayRef.current.showModel(model);
+
+  const ModelBtn = ({ Model, children }) => (
+    <Button variant="secondary" onClick={() => showModel(<Model />)}>{children}</Button>
+  );
+
+  return (
+    <>
+      <Overlay ref={overlayRef} />
+      <div className="p-6 w-full gap-2 flex">
+        <ModelBtn Model={EnergyModel}>Energy</ModelBtn>
+        <ModelBtn Model={TranspotationModel}>Transpotation</ModelBtn>
+        <ModelBtn Model={ResourceConsumptionModel}>Resource Consumption</ModelBtn>
+      </div>
+    </>
+  );
+};
 
 function CarbonCalculator() {
+  const [active, drafts, models, setTab, selectedTab] = useBooleanSelector(
+    3,
+    3
+  );
+
+  const addBehaviour = (n) => {
+    return { onClick: () => setTab(n), active: selectedTab == n };
+  };
+
   return (
-    
-        <><div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6 overflow-hidden">
-          <div className="flex-1 flex justify-start items-center gap-2">
-            <Tab title='Active Calculation' active/>
-            <Tab title='Saved Drafts' count={3}/>
-          </div>
-          <IconButton Icon={PlusIcon} variant='defaultOutlined'>New Calculation</IconButton>
+    <>
+      <div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6">
+        <div className="flex-1 flex justify-start items-center gap-2">
+          <Tab title="Active Calculation" {...addBehaviour(1)} />
+          <Tab title="Saved Drafts" count={3} {...addBehaviour(2)} />
+          <Tab title="Models" {...addBehaviour(3)} />
         </div>
-        <div className="w-full max-w-[1280px] p-6 inline-flex justify-start items-start gap-6 flex-wrap content-start">
-          <div className="flex-1 max-w-[680px] min-w-96 inline-flex flex-col justify-start items-start gap-4">
-            <div className="self-stretch pl-4 inline-flex justify-start items-center gap-2">
-              <div className="justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                Report Name:
-              </div>
-              <div className="flex-1 px-3 py-2 bg-white/5 rounded-lg outline  outline-offset-[-1px] outline-white/20 flex justify-start items-center gap-2">
-                <div className="flex-1 justify-start text-gray-300/40 text-base font-medium font-['Plus_Jakarta_Sans'] leading-tight">
-                  [Company Name] Carbon Assessment - [Date]
-                </div>
-              </div>
-            </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-end items-center gap-3">
-              <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                  Energy Consumption
-                </div>
-                <div className="self-stretch justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-tight">
-                  Enter electricity, gas, and other energy sources that power
-                  your operations.
-                </div>
-              </div>
-              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
-            </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
-              <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                  Transportation & Travel
-                </div>
-                <div className="self-stretch justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-tight">
-                  Include fleet vehicles, business travel, and employee
-                  commuting data.
-                </div>
-              </div>
-              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
-            </div>
-            <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-start items-center gap-3">
-              <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
-                <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                  Resource Consumption
-                </div>
-                <div className="self-stretch justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-tight">
-                  Capture materials, water usage, and waste management
-                  practices.
-                </div>
-              </div>
-              <IconButton Icon={PlusIcon} variant='secondaryOutlined'>Add Details</IconButton>
-            </div>
-            <div className="self-stretch py-4 rounded-2xl inline-flex justify-start items-center gap-3">
-              <div className="flex-1 px-2 inline-flex flex-col justify-start items-start gap-1">
-                <div className="self-stretch justify-start text-white text-base font-semibold font-['Plus_Jakarta_Sans'] leading-tight">
-                  Need Help Estimating?
-                </div>
-                <div className="self-stretch justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-tight">
-                  Capture materials, water usage, and waste management
-                  practices.
-                </div>
-              </div>
-              <IconButton Icon={SparklesIcon} variant='secondary'>Get Smart Defaults</IconButton>
-            </div>
-          </div>
-          <div className="flex-1 max-w-[480px] min-w-96 pl-6 border-l inline-flex flex-col justify-start items-center gap-6">
-            <div className="self-stretch inline-flex justify-between items-center">
-              <div className="flex-1 justify-start text-white text-base font-semibold font-['Plus_Jakarta_Sans'] leading-tight">
-                Carbon Assessment:
-              </div>
-              <div
-                data-state="Default"
-                data-variant="Secondary"
-                className="px-2.5 py-0.5 bg-base-secondary rounded-full outline  outline-offset-[-1px] outline-tailwind-colors-base-transparent/0 flex justify-center items-center gap-2.5"
-              >
-                <div className="justify-start text-base-secondary-foreground text-xs font-semibold font-['Inter'] leading-none">
-                  Live Preview
-                </div>
-              </div>
-            </div>
-            <div className="self-stretch inline-flex justify-between items-start">
-              <div className="flex-1 justify-start text-base-muted-foreground text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                Estimated Carbon Footprint:
-              </div>
-            </div>
-            <div className="self-stretch inline-flex justify-between items-start">
-              <div className="flex-1 justify-start text-base-muted-foreground text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                Equivalent to:
-              </div>
-            </div>
-            <div className="self-stretch inline-flex justify-between items-start">
-              <div className="flex-1 justify-start text-base-muted-foreground text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
-                Industry Standing:
-              </div>
-            </div>
-            <div className="self-stretch flex flex-col justify-start items-start gap-4">
-              <div className="self-stretch min-w-80 flex flex-col justify-start items-start gap-3">
-                <div className="self-stretch inline-flex justify-center items-center gap-2">
-                  <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">
-                    Current Footprint Breakdown:
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full max-w-[1280px] p-6 inline-flex justify-end items-start gap-4">
-          <Button variant='secondaryOutlined'>Save for Later</Button>
-          <Button>Generate Intelligence Report</Button>
-        </div></>
-      
-  )
+        <IconButton Icon={PlusIcon} variant="defaultOutlined">
+          New Calculation
+        </IconButton>
+      </div>
+      {active && <ActiveCalculation />}
+      {drafts && <SavedDrafts />}
+      {models && <Models />}
+      <div className="w-full max-w-[1280px] p-6 inline-flex justify-end items-start gap-4">
+        <Button variant="secondaryOutlined">Save for Later</Button>
+        <Button>Generate Intelligence Report</Button>
+      </div>
+    </>
+  );
 }
 
-export default CarbonCalculator
+export default CarbonCalculator;
