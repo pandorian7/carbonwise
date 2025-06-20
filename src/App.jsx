@@ -1,8 +1,7 @@
 import React from 'react'
-import ActiveCalculation from './pages/active-calculation/ActiveCalculation'
 
 import Sidebar from './Components/Sidebar'
-import CarbonCalculator from './Components/CarbonCalculator'
+import CarbonCalculator from './pages/carbon-calculator/CarbonCalculator'
 import useBooleanSelector from './hooks/useBooleanSelector'
 import Dashboard from './pages/dashboard/Dashboard'
 import Breadcrumb from './Components/ui/Breadcrumb'

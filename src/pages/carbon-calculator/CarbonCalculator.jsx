@@ -1,8 +1,7 @@
 import React from 'react'
-import {PanelLeftIcon, ChevronRightIcon, PlusIcon, SparklesIcon} from 'lucide-react'
-import Breadcrumb from './ui/Breadcrumb'
-import Tab from './ui/Tab'
-import {Button, IconButton} from './ui/Button'
+import {PlusIcon, SparklesIcon} from 'lucide-react'
+import Tab from '../../Components/ui/Tab'
+import {Button, IconButton} from '../../Components/ui/Button'
 
 function CarbonCalculator() {
   return (
