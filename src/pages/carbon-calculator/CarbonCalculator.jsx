@@ -8,6 +8,7 @@ import useBooleanSelector from "@/hooks/useBooleanSelector";
 import EnergyModel from "@/Components/Models/EnergyModel";
 import Overlay from "@/Components/ui/Overlay";
 import { useRef } from "react";
+import TranspotationModel from "@/Components/Models/TranspotationModel";
 
 const Models = () => {
   const overlayRef = useRef(null);
@@ -23,6 +24,7 @@ const Models = () => {
       <Overlay ref={overlayRef} />
       <div className="p-6 w-full gap-2 flex">
         <ModelBtn Model={EnergyModel}>Energy</ModelBtn>
+        <ModelBtn Model={TranspotationModel}>Transpotation</ModelBtn>
       </div>
     </>
   );
