@@ -3,7 +3,7 @@ import React from "react";
 import Breadcrumb from "@/Components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
 
-import { IconButton, IconButtonR, } from "@/Components/ui/Button";
+import { IconButton, IconButtonR, Button} from "@/Components/ui/Button";
 
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 
@@ -46,9 +46,7 @@ function Dashboard() {
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3">
           <div className="self-stretch inline-flex justify-center items-center gap-2">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Goal Progress</div>
-            <div data-show-left-icon="false" data-show-right-icon="false" data-size="sm" data-state="Default" data-variant="Outline" className="h-9 px-3 py-2 bg-base-background rounded-md outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2">
-              <div className="justify-center text-base-foreground text-sm font-medium font-['Inter'] leading-tight">See All</div>
-            </div>
+            <Button variant='secondaryOutlined'>See All</Button>
           </div>
           <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789</div> 
           <div
@@ -81,9 +79,7 @@ function Dashboard() {
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3">
           <div className="self-stretch inline-flex justify-center items-center gap-2">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Emissions per Employee</div>
-            <div data-show-left-icon="false" data-show-right-icon="false" data-size="sm" data-state="Default" data-variant="Outline" className="h-9 px-3 py-2 bg-base-background rounded-md outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2">
-              <div className="justify-center text-base-foreground text-sm font-medium font-['Inter'] leading-tight">See All</div>
-            </div>
+            <Button variant='secondaryOutlined'>See All</Button>
           </div>
           <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">{currentEmissions} kg CO₂e</div>
 
@@ -226,9 +222,7 @@ function Dashboard() {
         <div className="flex-1 min-w-60 flex flex-col justify-start items-start gap-3">
           <div className="self-stretch inline-flex justify-center items-center gap-2">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Recommendations Just for You</div>
-            <div data-show-left-icon="false" data-show-right-icon="false" data-size="sm" data-state="Default" data-variant="Outline" className="h-9 px-3 py-2 bg-base-background rounded-md outline-1 outline-offset-[-1px] outline-base-input flex justify-center items-center gap-2">
-              <div className="justify-center text-base-foreground text-sm font-medium font-['Inter'] leading-tight">See All</div>
-            </div>
+            <Button variant='secondaryOutlined'>See All</Button>
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-2">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
