@@ -6,9 +6,8 @@ import {Button, IconButton} from './ui/Button'
 
 function CarbonCalculator() {
   return (
-    <div className="flex-1 self-stretch min-w-[560px] bg-base-background rounded-tl-2xl rounded-tr-2xl inline-flex flex-col justify-start items-center overflow-hidden">
-        <Breadcrumb title={"Carbon Calculator"} Icon={PanelLeftIcon}/>
-        <div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6 overflow-hidden">
+    
+        <><div className="self-stretch px-6 bg-base-background border-b border-base-border inline-flex justify-start items-center gap-6 overflow-hidden">
           <div className="flex-1 flex justify-start items-center gap-2">
             <Tab title='Active Calculation' active/>
             <Tab title='Saved Drafts' count={3}/>
@@ -120,8 +119,8 @@ function CarbonCalculator() {
         <div className="w-full max-w-[1280px] p-6 inline-flex justify-end items-start gap-4">
           <Button variant='secondaryOutlined'>Save for Later</Button>
           <Button>Generate Intelligence Report</Button>
-        </div>
-      </div>
+        </div></>
+      
   )
 }
 
