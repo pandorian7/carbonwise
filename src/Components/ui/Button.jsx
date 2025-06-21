@@ -69,4 +69,25 @@ function IconButton({ Icon, children, ...props }) {
   return <Button children={[IconComp, ...(children ? React.Children.toArray(children) : [])]} {...props} className={"px-3 py-3"} />;
 }
 
-export { Button, buttonVariants, IconButton };
+function IconButtonR({ Icon, children, ...props }) {
+  const IconComp = (
+    <span
+      key="icon"
+      className={`w-4 h-4 overflow-hidden flex items-center justify-center`}
+    >
+      <div className="w-4 h-4 relative">
+        <Icon className={`icon16`} />
+      </div>
+    </span>
+  );
+
+  return (
+    <Button  {...props}className={`px-3 py-3 flex items-center justify-center gap-2`}>
+      {children && React.Children.toArray(children)}
+      {IconComp}
+    </Button>
+  );
+}
+
+
+export { Button, buttonVariants, IconButton, IconButtonR };
