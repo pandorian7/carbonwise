@@ -6,6 +6,7 @@ import useBooleanSelector from "./hooks/useBooleanSelector";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Breadcrumb from "./Components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
+import Recommendations from "./pages/recommendations/Recommendations";
 
 function App() {
   const titles = [
@@ -39,6 +40,7 @@ function App() {
         <div className="w-full h-full flex flex-col overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-base-muted-foreground/80 scrollbar-track-base-sidebar-accent">
           {dashboard && <Dashboard />}
           {calculator && <CarbonCalculator />}
+          {recommendations && <Recommendations/>}
         </div>
       </div>
     </div>
