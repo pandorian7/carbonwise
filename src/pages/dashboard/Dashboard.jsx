@@ -20,10 +20,10 @@ function Dashboard() {
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
   const emissionsData = [
-    { month: 'Jan', value: 50 },
+    { month: 'Jan', value: 300 },
     { month: 'Feb', value: 180 },
     { month: 'Mar', value: 250 },
-    { month: 'Apr', value: 200 },
+    { month: 'Apr', value: 100 },
     { month: 'May', value: 300 },
     { month: 'Jun', value: 280 },
     { month: 'Jly', value: 180 },
@@ -32,7 +32,7 @@ function Dashboard() {
   const totalChartEmissions = emissionsData.reduce((sum, data) => sum + data.value, 0);
 
   const CHART_HEIGHT = 192;
-  const CHART_WIDTH = 1064;
+  const CHART_WIDTH = 1440;
 
   const PADDING_TOP = 20;
   const PADDING_RIGHT = 20;
@@ -190,7 +190,7 @@ function Dashboard() {
       </div>
 
       {/*Graph */}
-      <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 my-6">
+      <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 my-6 mx-6">
         <div className="self-stretch inline-flex justify-center items-center gap-2">
           <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Total Emissions</div>
           <div className="flex-1 text-right justify-start text-lime-400 text-sm font-medium font-['Inter'] leading-tight">+{totalEmmision}%</div>
@@ -199,7 +199,7 @@ function Dashboard() {
           {Intl.NumberFormat('en-US').format(totalChartEmissions)} kg CO₂e
         </div>
 
-        <div className="self-stretch pl-6 py-6 flex flex-col justify-start items-start gap-2.5">
+        <div className="self-stretch py-6 flex flex-col justify-start items-start gap-2.5">
           <div data-show-grid="true" data-show-legend="false" data-type="Linear" className="self-stretch h-48 flex flex-col justify-end items-center gap-9">
             <div className="self-stretch flex-1 relative">
               <svg
