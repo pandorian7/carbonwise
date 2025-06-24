@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconButton } from "@/components/ui/Button";
+import { IconButton } from "@/components/ui/button";
 import { PlusIcon, SparklesIcon} from "lucide-react";
 
 function ActiveCalculation() {
