@@ -3,7 +3,7 @@ import {ChevronRightIcon} from 'lucide-react'
 function Breadcrumb({title, Icon}) {
   return (
     <div className="self-stretch h-16 bg-base-background border-b border-base-border inline-flex justify-center items-center">
-          <div className="flex-1 max-w-[1280px] px-6 flex justify-start items-center gap-2">
+          <div className="flex-1 px-6 flex justify-start items-center gap-2">
             <div
               data-state="Default"
               className="w-7 h-7 rounded-md flex justify-center items-center"
