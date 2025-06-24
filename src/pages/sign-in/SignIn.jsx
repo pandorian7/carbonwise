@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { LoginForm } from '@/Components/login-form'
+import { LoginForm } from '@/components/login-form'
 import { GalleryVerticalEnd } from "lucide-react"
 import earth from './earth.png'
-import Logo from '@/Components/Logo'
+import Logo from '@/components/Logo'
 
 function SignIn() {
   return (

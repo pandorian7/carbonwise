@@ -1,16 +1,16 @@
 import React from "react";
 import { PlusIcon } from "lucide-react";
-import Tab from "../../Components/ui/Tab";
-import { Button, IconButton } from "../../Components/ui/Button";
+import Tab from "../../components/ui/Tab";
+import { Button, IconButton } from "../../components/ui/Button";
 import ActiveCalculation from "./ActiveCalculation";
 import SavedDrafts from "./SavedDrafts";
 import useBooleanSelector from "@/hooks/useBooleanSelector";
-import Overlay from "@/Components/ui/Overlay";
+import Overlay from "@/components/ui/Overlay";
 import { useRef } from "react";
 
-import EnergyModel from "@/Components/Models/EnergyModel";
-import TranspotationModel from "@/Components/Models/TranspotationModel";
-import ResourceConsumptionModel from "@/Components/Models/ResourceConsumptionModel";
+import EnergyModel from "@/components/Models/EnergyModel";
+import TranspotationModel from "@/components/Models/TranspotationModel";
+import ResourceConsumptionModel from "@/components/Models/ResourceConsumptionModel";
 
 const Models = () => {
   const overlayRef = useRef(null);

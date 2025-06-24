@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import Breadcrumb from "@/Components/ui/Breadcrumb";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
 
-import { IconButton, IconButtonR, Button } from "@/Components/ui/Button";
+import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
 
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 

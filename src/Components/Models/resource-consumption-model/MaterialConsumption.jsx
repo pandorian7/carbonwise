@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { ModelEntry } from '@/Components/ui/model/Model'
-import TickScale from '@/Components/ui/model/TickScale'
-import { ModelEntryContainer } from '@/Components/ui/model/Model'
-import ToggleGroup from '@/Components/ui/ToggleGroup'
-import { Input } from '@/Components/ui/input'
-import { SelectExt } from '@/Components/ui/select'
-import { IconButton } from '@/Components/ui/button'
+import { ModelEntry } from '@/components/ui/model/Model'
+import TickScale from '@/components/ui/model/TickScale'
+import { ModelEntryContainer } from '@/components/ui/model/Model'
+import ToggleGroup from '@/components/ui/ToggleGroup'
+import { Input } from '@/components/ui/input'
+import { SelectExt } from '@/components/ui/select'
+import { IconButton } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 
 function MaterialConsumption() {

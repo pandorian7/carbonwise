@@ -1,10 +1,10 @@
 import React from "react";
 
-import Sidebar from "./Components/Sidebar";
+import Sidebar from "./components/Sidebar";
 import CarbonCalculator from "./pages/carbon-calculator/CarbonCalculator";
 import useBooleanSelector from "./hooks/useBooleanSelector";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Breadcrumb from "./Components/ui/Breadcrumb";
+import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import useBooleanSelector from "@/hooks/useBooleanSelector";
-import Tab from "@/Components/ui/Tab";
+import Tab from "@/components/ui/Tab";
 import RecommendationsTab from "./RecommendationsTab";
 import ActionPlanTab from "./ActionPlanTab";
 
