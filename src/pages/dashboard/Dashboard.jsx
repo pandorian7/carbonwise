@@ -1,33 +1,112 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Breadcrumb from "@/Components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
 
-import { IconButton, IconButtonR, Button} from "@/Components/ui/Button";
+import { IconButton, IconButtonR, Button } from "@/Components/ui/Button";
 
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 
 function Dashboard() {
-  const currentGoalProgress = 1789; 
-  const totalGoalForProgress = 2500; 
+
+  const [totalEmmision, setTotalEmmision] = useState(15.11);
+
+  const currentGoalProgress = 1789;
+  const totalGoalForProgress = 2500;
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
-  
+
   const currentEmissions = 50;
-  const benchmarkEmissions = 110; 
+  const benchmarkEmissions = 110;
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
+
+  const emissionsData = [
+    { month: 'Jan', value: 50 },
+    { month: 'Feb', value: 180 },
+    { month: 'Mar', value: 250 },
+    { month: 'Apr', value: 200 },
+    { month: 'May', value: 300 },
+    { month: 'Jun', value: 280 },
+    { month: 'Jly', value: 180 },
+  ];
+
+  const totalChartEmissions = emissionsData.reduce((sum, data) => sum + data.value, 0);
+
+  const CHART_HEIGHT = 192;
+  const CHART_WIDTH = 1064;
+
+  const PADDING_TOP = 20;
+  const PADDING_RIGHT = 20;
+  const PADDING_BOTTOM = 40;
+  const PADDING_LEFT = 40;
+
+  const innerChartWidth = CHART_WIDTH - PADDING_LEFT - PADDING_RIGHT;
+  const innerChartHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
+
+  const allValues = emissionsData.map(d => d.value);
+  const maxValue = Math.max(...allValues);
+  const minValue = 0;
+
+  const yScale = (value) => {
+    return PADDING_TOP + innerChartHeight - ((value - minValue) / (maxValue - minValue)) * innerChartHeight;
+  };
+
+  const xScale = (index) => {
+    return PADDING_LEFT + (index / (emissionsData.length - 1)) * innerChartWidth;
+  };
+
+  const linePath = emissionsData.map((data, index) => {
+    const x = xScale(index);
+    const y = yScale(data.value);
+    return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+  }).join(' ');
+
+  const numYAxisLines = 5;
+  const yAxisLabels = [];
+  const yAxisGridLines = [];
+  const yAxisValueStep = Math.ceil(maxValue / (numYAxisLines - 1) / 100) * 100;
+
+  for (let i = 0; i < numYAxisLines; i++) {
+    const labelValue = i * yAxisValueStep;
+    const y = yScale(labelValue);
+
+    yAxisGridLines.push(
+      <line
+        key={`grid-y-${i}`}
+        x1={PADDING_LEFT}
+        y1={y}
+        x2={CHART_WIDTH - PADDING_RIGHT}
+        y2={y}
+        stroke="#4B5563"
+        strokeWidth="0.5"
+        strokeOpacity="0.8"
+      />
+    );
+
+    yAxisLabels.push(
+      <text
+        key={`label-y-${i}`}
+        x={PADDING_LEFT - 10}
+        y={y + 4}
+        textAnchor="end"
+        fill="#9CA3AF"
+        fontSize="10"
+      >
+        {labelValue}
+      </text>
+    );
+  }
+
 
   return (
     <>
-      <div data-breadcrumb="false" data-breakpoint="Desktop" data-button-1="true" data-button-2="true" data-button-3="false" data-button-4="false" data-buttons="true" data-description="false" data-page-select="false" className="self-stretch py-4 bg-base-background border-b border-base-border inline-flex flex-col justify-start items-center gap-4">
-        <div className="w-full max-w-[1280px] px-6 flex flex-col justify-start items-start gap-6">
-          <div className="self-stretch inline-flex justify-between items-center overflow-hidden">
-            <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch justify-start text-base-foreground text-3xl font-bold font-['Inter'] leading-9">Overview</div>
-            </div>
-            <div className="flex-1 flex justify-end items-center gap-2">
-              <IconButton Icon={SearchIcon} variant='secondaryOutlined'>Search</IconButton>
-              <IconButton Icon={PlusIcon} variant='default'>New Calculation</IconButton>
-            </div>
+      <div data-breadcrumb="false" data-breakpoint="Desktop" data-button-1="true" data-button-2="true" data-button-3="false" data-button-4="false" data-buttons="true" data-description="false" data-page-select="false" className="self-stretch py-4 bg-base-background border-b border-base-border inline-flex flex-col justify-start items-center gap-4 mx-6">
+        <div className="self-stretch inline-flex justify-between items-center overflow-hidden">
+          <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+            <div className="self-stretch justify-start text-base-foreground text-3xl font-bold font-['Inter'] leading-9">Overview</div>
+          </div>
+          <div className="flex-1 flex justify-end items-center gap-2">
+            <IconButton Icon={SearchIcon} variant='secondaryOutlined'>Search</IconButton>
+            <IconButton Icon={PlusIcon} variant='default'>New Calculation</IconButton>
           </div>
         </div>
       </div>
@@ -48,7 +127,7 @@ function Dashboard() {
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Goal Progress</div>
             <Button variant='secondaryOutlined'>See All</Button>
           </div>
-          <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789</div> 
+          <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789</div>
           <div
             data-active="False"
             data-horizontal="True"
@@ -63,7 +142,7 @@ function Dashboard() {
                 className="h-10 left-0 top-0 absolute bg-lime-400"
                 style={{ width: `${goalProgressPercentage}%` }}
               />
-               <div className="w-full h-full bg-neutral-700 rounded-lg" /> 
+              <div className="w-full h-full bg-neutral-700 rounded-lg" />
             </div>
           </div>
 
@@ -93,7 +172,7 @@ function Dashboard() {
                        rounded-lg outline-1 outline-offset-[-1px] outline-purple-500"
           >
             <div className="flex-1 self-stretch relative overflow-hidden rounded-lg">
-                <div className="w-full h-full bg-neutral-700 rounded-lg" />
+              <div className="w-full h-full bg-neutral-700 rounded-lg" />
               <div
                 className="h-10 left-0 top-0 absolute bg-lime-400"
                 style={{ width: `${emissionsProgressPercentage}%` }}
@@ -110,49 +189,78 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 my-6 mx-6">
+      {/*Graph */}
+      <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 my-6">
         <div className="self-stretch inline-flex justify-center items-center gap-2">
           <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Total Emissions</div>
-          <div className="flex-1 text-right justify-start text-lime-400 text-sm font-medium font-['Inter'] leading-tight">+15.11%</div>
+          <div className="flex-1 text-right justify-start text-lime-400 text-sm font-medium font-['Inter'] leading-tight">+{totalEmmision}%</div>
         </div>
-        <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,245 kg CO₂e</div>
+        <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">
+          {Intl.NumberFormat('en-US').format(totalChartEmissions)} kg CO₂e
+        </div>
+
         <div className="self-stretch pl-6 py-6 flex flex-col justify-start items-start gap-2.5">
           <div data-show-grid="true" data-show-legend="false" data-type="Linear" className="self-stretch h-48 flex flex-col justify-end items-center gap-9">
             <div className="self-stretch flex-1 relative">
-              <div data-horizontal="False" data-show-x-axis="true" data-show-y-axis="true" className="w-[1040.64px] h-48 left-[10.38px] top-0 absolute inline-flex flex-col justify-between items-start">
-                <div className="self-stretch h-0 opacity-80 outline-1 outline-offset-[-0.50px] outline-base-border" />
-                <div className="self-stretch h-0 opacity-80 outline-1 outline-offset-[-0.50px] outline-base-border" />
-                <div className="self-stretch h-0 opacity-80 outline-1 outline-offset-[-0.50px] outline-base-border" />
-                <div className="self-stretch h-0 opacity-80 outline-1 outline-offset-[-0.50px] outline-base-border" />
-                <div className="self-stretch h-0 opacity-80 outline-1 outline-offset-[-0.50px] outline-base-border" />
-                <div className="w-[1065px] left-[-12px] top-[212px] absolute inline-flex justify-between items-center">
-                  <div className="text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">Jan</div>
-                  <div className="text-center justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">Feb</div>
-                  <div className="text-center justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">Mar</div>
-                  <div className="text-center justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">Apr</div>
-                  <div className="text-center justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">May</div>
-                  <div className="text-center justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">Jun</div>
-                </div>
-                <div className="w-6 h-52 left-[-35px] top-[-6px] absolute flex flex-col justify-between items-center">
-                  <div className="self-stretch text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">400</div>
-                  <div className="self-stretch text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">300</div>
-                  <div className="self-stretch text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">200</div>
-                  <div className="self-stretch text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">100</div>
-                  <div className="self-stretch text-right justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-3">0</div>
-                </div>
-              </div>
-              <div className="w-[1064px] h-36 left-0 top-[48.25px] absolute">
-                <div className="w-[1038.76px] h-28 left-[12.13px] top-[3.43px] absolute outline-2 outline-offset-[-1px] outline-lime-400" />
-                <div data-custom="False" data-show-dot="false" data-show-label="false" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[8.13px] top-[57.30px] absolute inline-flex flex-col justify-start items-center gap-px" />
-                <div data-custom="False" data-show-dot="false" data-show-label="false" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[215.88px] top-[-0.57px] absolute inline-flex flex-col justify-start items-center gap-px" />
-                <div data-custom="False" data-show-dot="false" data-show-label="false" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[631.39px] top-[112.25px] absolute inline-flex flex-col justify-start items-center gap-px" />
-                <div data-custom="False" data-show-dot="false" data-show-label="false" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[423.63px] top-[32.49px] absolute inline-flex flex-col justify-start items-center gap-px" />
-                <div data-custom="False" data-show-dot="true" data-show-label="true" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[839.14px] top-[46.12px] absolute inline-flex flex-col justify-start items-center gap-px">
-                  <div className="w-2 h-2 max-w-2 max-h-2 bg-base-chart-1 rounded-full" />
-                  <div className="left-[-12px] top-[-16px] absolute text-center justify-start text-base-foreground text-xs font-normal font-['Inter'] leading-3">1,245</div>
-                </div>
-                <div data-custom="False" data-show-dot="false" data-show-label="false" data-size="8" className="max-w-2 min-w-2 max-h-2 min-h-2 left-[1046.88px] top-[43.68px] absolute inline-flex flex-col justify-start items-center gap-px" />
-              </div>
+              <svg
+                width="100%"
+                height="100%"
+                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
+                preserveAspectRatio="xMidYMid meet"
+                className="absolute left-0 top-0"
+              >
+                {yAxisGridLines}
+
+                <path
+                  d={linePath}
+                  fill="none"
+                  stroke="#84CC16"
+                  strokeWidth="2"
+                />
+
+                {emissionsData.map((data, index) => {
+                  const x = xScale(index);
+                  const y = yScale(data.value);
+                  const isLastPoint = index === emissionsData.length - 1;
+                  return (
+                    <g key={`point-${data.month}`}>
+                      <circle
+                        cx={x}
+                        cy={y}
+                        r={isLastPoint ? 4 : 2}
+                        fill={isLastPoint ? "#84CC16" : "#84CC16"}
+                      />
+                      {isLastPoint && (
+                        <text
+                          x={x}
+                          y={y - 10}
+                          textAnchor="middle"
+                          fill="#F9FAFB"
+                          fontSize="12"
+                        >
+                          {Intl.NumberFormat('en-US').format(data.value)}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {emissionsData.map((data, index) => (
+                  <text
+                    key={`month-label-${data.month}`}
+                    x={xScale(index)}
+                    y={CHART_HEIGHT - PADDING_BOTTOM + 20}
+                    textAnchor="middle"
+                    fill="#9CA3AF"
+                    fontSize="10"
+                  >
+                    {data.month}
+                  </text>
+                ))}
+
+                {yAxisLabels}
+
+              </svg>
             </div>
           </div>
         </div>
@@ -226,7 +334,7 @@ function Dashboard() {
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-2">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2"> 
+              <div className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2">
                 <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Switch to LED lighting in office spaces.</div>
                 <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
               </div>
