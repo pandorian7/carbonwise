@@ -140,7 +140,7 @@ function SelectExt({
   placeholder = "Placeholder",
   items = {},
 }) {
-  console.log(items);
+  // console.log(items);
   return (
     <Select>
       <SelectTrigger className={widthClass}>

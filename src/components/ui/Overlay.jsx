@@ -15,7 +15,7 @@ const Overlay = forwardRef(({ children }, ref) => {
       setVisible(1);
     },
     showModel: (Model) => {
-      console.log(Model.props);
+      // console.log(Model.props);
       setContent(
         cloneElement(Model, {
           ...Model.props,
@@ -41,6 +41,7 @@ const Overlay = forwardRef(({ children }, ref) => {
         opacity: visible,
         transitionDuration: "0.2s",
         pointerEvents: visible ? "auto" : "none",
+        zIndex: 100
       }}
     >
       {content}
