@@ -1,0 +1,371 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background-color: #040405;
+  min-height: 100vh;
+  overflow-y: auto;
+ 
+}
+
+.login-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+   background-image: linear-gradient(
+    to left,
+    #18181b 0%,
+    #18181b 35%,
+    rgba(24, 24, 27, 0.85) 50%,
+    rgba(24, 24, 27, 0.4) 75%,
+    rgba(24, 24, 27, 0.1) 100%
+  ), url('/src/assets/E2.png');
+  background-position: left ;
+  background-repeat: repeat;
+  background-size: 3100px ;
+  height: 100vh;
+  background-position-y:4px;
+ 
+  
+}
+
+.web-app-nav-bar1 {
+  color: #c1f17e;
+  white-space: nowrap;
+  letter-spacing: -1.12px;
+  background-color:  #0c0c11;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 48px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+}
+
+.container, .containerlogin {
+  justify-content: start;
+  align-self: stretch;
+  align-items: center;
+  gap: 24px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0px;
+  display: flex;
+}
+
+.logo {
+  justify-content: start;
+  align-self: stretch;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  
+  
+}
+
+.img {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 28px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.eco-track {
+  align-self: stretch;
+  margin-top: auto;
+  margin-bottom: auto;
+  color: #c1f17e;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.main-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto;
+  z-index: 10;
+  margin-left: 150px;
+  padding-top: 60px;
+}
+
+.content-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 12px;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-title {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.02em;
+  color: #cbd5e1;
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  color: #cbd5e1;
+  font-size: 16px;
+  line-height: 1.2;
+  margin-top: 8px;
+}
+
+.form-fields1 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.input-label {
+  width: 100%;
+  font-size: 15px;
+  line-height: 12px;
+  color: rgba(203, 213, 225, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: rgba(203, 213, 225, 0.8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.input-field {
+  padding: 12px 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 20px;
+  background-color: transparent;
+  color: rgba(203, 213, 225, 0.4);
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.remember-text {
+  font-size: 14px;
+  line-height: 16px;
+  color: #cbd5e1;
+}
+
+.login-button {
+   padding: 8px 16px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  background-color: #A3E635;
+  color: #0A0A0A;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+ 
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1.5px;
+  background-color: rgba(214, 221, 230, 0.2);
+}
+
+.divider-text {
+  color: rgba(214, 221, 230, 0.62);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.google-buttonl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 24px;
+  border: 1.5px solid rgba(203, 213, 225, 0.2);
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+  line-height: 16px;
+  box-sizing: border-box;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.google-text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 10px;
+  color: #cbd5e1;
+}
+
+.signup-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.signup-link {
+  color: #cbd5e1;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.25rem;
+  text-decoration: underline;
+}
+
+/* You can remove or adjust the background-overlay class since we're using gradient */
+.background-overlay {
+  display: none; /* or remove this class entirely */
+}
+
+@media (max-width: 768px) {
+  .web-app-nav-bar {
+    padding: 12px 20px;
+  }
+  
+  .form-title {
+    font-size: 24px;
+    line-height: 32px;
+  }
+  
+  .content-wrapper {
+    max-width: 400px;
+    padding: 0 1rem;
+  }
+
+  .login-wrapper {
+    background-position: center;
+    background-size: cover;
+  }
+
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+    background: rgba(24, 24, 27, 0.8); /* Add background overlay for mobile */
+  }
+}
+
+@media (max-width: 640px) {
+  .web-app-nav-bar {
+    padding: 12px 15px;
+  }
+  
+  .form-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .form-subtitle,
+  .input-label,
+  .input-field,
+  .login-button,
+  .google-text,
+  .signup-text {
+    font-size: 14px;
+  }
+
+  .forgot-password,
+  .remember-text {
+    font-size: 12px;
+  }
+
+  .input-field,
+  .login-button,
+  .google-buttonl {
+    padding: 10px 16px;
+  }
+  
+  .content-wrapper {
+    width: 95%;
+    padding: 0;
+  }
+  
+  .form-container {
+    padding: 1.5rem 0.75rem;
+  }
+}
