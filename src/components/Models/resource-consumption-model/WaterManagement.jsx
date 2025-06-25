@@ -45,7 +45,7 @@ function WaterManagement() {
         Add new source
       </IconButton>
 
-      <ModelEntry title={"Wastewater Treatment"}>
+      {/* <ModelEntry title={"Wastewater Treatment"}>
         <SelectExt
           placeholder="Treatment Type"
           items={items.treatment}
@@ -56,10 +56,10 @@ function WaterManagement() {
           <Input disabled className="w-24 disabled:bg-base-background" />
           <ToggleGroup options={["m3", "Liters"]} selected={"m3"} />
         </ModelEntryContainer>
-      </ModelEntry>
-      <IconButton Icon={PlusIcon} variant="secondaryOutlined">
+      </ModelEntry> */}
+      {/* <IconButton Icon={PlusIcon} variant="secondaryOutlined">
         Add treatment type
-      </IconButton>
+      </IconButton> */}
     </>
   );
 }

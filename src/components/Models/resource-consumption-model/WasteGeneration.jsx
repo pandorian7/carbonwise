@@ -23,18 +23,19 @@ function WasteGeneration() {
       "other": "Other"
     },
     disposal: {
-        landfill: "Landfill",
-        incineration: "Incineration",
-        recyle: "Recycling",
-        compost: "Composting",
-        reuse: "Reuse",
-        digestion: "Anaerobic Digestion",
-        recovery: "Advanced Recovery"
+        "Landfilled": "Landfill",
+        // incineration: "Incineration",
+        "Recycled": "Recycling",
+        "Composted": "Composting",
+        "Combusted": "Combusting"
+        // reuse: "Reuse",
+        // digestion: "Anaerobic Digestion",
+        // recovery: "Advanced Recovery"
     }
   };
   return (
     <>
-      <ModelEntry title={"Waste Category"}>
+      {/* <ModelEntry title={"Waste Category"}>
         <SelectExt placeholder="Waste Category" items={items.waste} widthClass="w-38"/>
         <TickScale />
         <ModelEntryContainer>
@@ -44,17 +45,20 @@ function WasteGeneration() {
       </ModelEntry>
       <IconButton Icon={PlusIcon} variant="secondaryOutlined">
         Add waste stream
-      </IconButton>
+      </IconButton> */}
 
-      <ModelEntry title={"Disposal Method"}>
+      <ModelEntry title={"Waste Selection"}>
+        <div className="flex flex-col gap-3">
+          <SelectExt placeholder="Waste Category" items={items.waste} widthClass="w-38"/>
         <SelectExt placeholder="Disposal Method" items={items.disposal} widthClass="w-38"/>
+        </div>
         <TickScale />
         <ModelEntryContainer>
           <Input disabled className="w-24 disabled:bg-base-background" />
           <ToggleGroup options={["kg", "tons"]} selected={"kg"} />
         </ModelEntryContainer>
       </ModelEntry>
-      <IconButton Icon={PlusIcon} variant="secondaryOutlined">
+      {/* <IconButton Icon={PlusIcon} variant="secondaryOutlined">
         Add disposal method
       </IconButton>
       <ModelEntry title={"Waste Management Costs (monthly)"}>
@@ -63,7 +67,7 @@ function WasteGeneration() {
           <Input disabled className="w-24 disabled:bg-base-background" />
           <ToggleGroup options={["/kg", "/ton"]} selected={"/kg"} />
         </ModelEntryContainer>
-      </ModelEntry>
+      </ModelEntry> */}
     </>
   );
 }
