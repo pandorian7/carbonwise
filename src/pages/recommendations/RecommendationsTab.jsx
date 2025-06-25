@@ -112,7 +112,7 @@ function RecommendationsTab() {
           </div> */}
         </div>
       </div>
-      <Table/>
+      <Table data={[{title: "Led lighting rooftop", category: "Energy", carbonImpact: 43.5, finantialImpact: 36500, cost: 64500, priority: "Low"}]}/>
     </div>
   );
 }
