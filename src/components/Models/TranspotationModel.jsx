@@ -3,7 +3,7 @@ import Model, { ModelEntry, ModelEntryContainer } from "../ui/model/Model";
 import TickScale from "../ui/model/TickScale";
 import { Input } from "../ui/input";
 import ToggleGroup from "../ui/ToggleGroup";
-import { IconButton } from "../ui/button";
+import { IconButton } from "../ui/Button";
 import { PlusIcon } from "lucide-react";
 import { SelectExt } from "../ui/select";
 

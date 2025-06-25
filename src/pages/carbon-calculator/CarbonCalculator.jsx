@@ -1,7 +1,7 @@
 import React from "react";
 import { PlusIcon } from "lucide-react";
 import Tab from "../../components/ui/Tab";
-import { Button, IconButton } from "../../components/ui/button";
+import { Button, IconButton } from "@/components/ui/Button";
 import ActiveCalculation from "./ActiveCalculation";
 import SavedDrafts from "./SavedDrafts";
 import useBooleanSelector from "@/hooks/useBooleanSelector";

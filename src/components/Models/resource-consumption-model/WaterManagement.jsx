@@ -6,7 +6,7 @@ import TickScale from "@/components/ui/model/TickScale";
 import { Input } from "@/components/ui/input";
 import { ModelEntryContainer } from "@/components/ui/model/Model";
 import ToggleGroup from "@/components/ui/ToggleGroup";
-import { IconButton } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
 
 function WaterManagement() {

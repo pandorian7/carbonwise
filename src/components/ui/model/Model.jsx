@@ -2,7 +2,7 @@ import React from "react";
 
 import { XIcon } from "lucide-react";
 
-import { Button, IconButton } from "../button";
+import { Button, IconButton } from "../Button";
 
 function Model({ title, children, description, onClose}) {
   return (

@@ -6,7 +6,7 @@ import { ModelEntryContainer } from "@/components/ui/model/Model";
 import { Input } from "@/components/ui/input";
 import ToggleGroup from "@/components/ui/ToggleGroup";
 import { SelectExt } from "@/components/ui/select";
-import { IconButton } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
 
 function WasteGeneration() {
