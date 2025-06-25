@@ -50,10 +50,10 @@ function Card({title, content: {carbonImapct=0, benefits=0, paybackPerios=0, dif
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 w-full gap-3">
-        <Button variant="secondaryOutlined">
+      <div className="ml-auto">
+        {/* <Button variant="secondaryOutlined">
             View details
-        </Button>
+        </Button> */}
         <IconButton Icon={PlusIcon} variant="secondary">
             Add to Plan
         </IconButton>

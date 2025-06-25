@@ -1,36 +1,46 @@
-import React from 'react'
+import React from "react";
 
-import { ModelEntry } from '@/components/ui/model/Model'
-import TickScale from '@/components/ui/model/TickScale'
-import { ModelEntryContainer } from '@/components/ui/model/Model'
-import ToggleGroup from '@/components/ui/ToggleGroup'
-import { Input } from '@/components/ui/input'
-import { SelectExt } from '@/components/ui/select'
-import { IconButton } from '@/components/ui/Button'
-import { PlusIcon } from 'lucide-react'
+import { ModelEntry } from "@/components/ui/model/Model";
+import TickScale from "@/components/ui/model/TickScale";
+import { ModelEntryContainer } from "@/components/ui/model/Model";
+import ToggleGroup from "@/components/ui/ToggleGroup";
+import { Input } from "@/components/ui/input";
+import { SelectExt } from "@/components/ui/select";
+import { IconButton } from "@/components/ui/Button";
+import { PlusIcon } from "lucide-react";
 
 function MaterialConsumption() {
   return (
     <>
-      <ModelEntry title={"Company Fleet Fuel Usage (monthly) :"}>
-        <TickScale />
-        <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["Gallons", "Liters"]} selected={"Gallons"} />
-        </ModelEntryContainer>
-      </ModelEntry>
-      <ModelEntry title={"Business Air Travel (monthly) :"}>
-        <TickScale />
-        <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["hrs", "kms"]} selected={"hrs"} />
-        </ModelEntryContainer>
-      </ModelEntry>
-      <ModelEntry title={"Employee Commuting (monthly) :"}>
+      <ModelEntry title={"Raw Materials Input"}>
         <SelectExt
-          widthClass="w-28"
-          placeholder="Medium"
-          items={{ bus: "Bus", train: "Train" }}
+          widthClass="w-50"
+          placeholder="Material Type"
+          items={{
+            Steel: "Steel",
+            Aluminium: "Aluminium",
+            Plastic: "Plastic"
+          }}
+        />
+        <TickScale />
+        <ModelEntryContainer>
+          <Input disabled className="w-24 disabled:bg-base-background" />
+          <ToggleGroup options={["kg", "MMBtu"]} selected={"kg"} />
+        </ModelEntryContainer>
+      </ModelEntry>
+      <ModelEntry title={"Packaging Materials"}>
+        <SelectExt
+          widthClass="w-50"
+          placeholder="Material Type"
+          items={{"Paper/Cardboard":"Paper/Cardboard",
+            "Plastic (HDPE)": "Plastic (HDPE)",
+            "Plastic (PET)":"Plastic (PET)",
+            "Glass":"Glass",
+            "Metal":"Metal",
+            "Composite":"Composite",
+            "Bio-based":"Bio-based",
+            "Other": "Other"
+          }}
         />
         <TickScale />
         <ModelEntryContainer>
@@ -42,7 +52,7 @@ function MaterialConsumption() {
         Add a new commute method
       </IconButton>
     </>
-  )
+  );
 }
 
-export default MaterialConsumption
+export default MaterialConsumption;
