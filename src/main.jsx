@@ -5,10 +5,12 @@ import "./fonts.css";
 import Router from "./Router";
 
 import { BrowserRouter } from "react-router";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <StrictMode>
+      <ToastContainer />
       <Router />
     </StrictMode>
   </BrowserRouter>

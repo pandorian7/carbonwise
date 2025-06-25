@@ -8,12 +8,21 @@ import EnergyModel from "@/components/Models/EnergyModel";
 import TranspotationModel from "@/components/Models/TranspotationModel";
 import ResourceConsumptionModel from "@/components/Models/ResourceConsumptionModel";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import api from "@/lib/api";
 
 function ActiveCalculation() {
   const overlayRef = useRef(null);
 
   const showModel = (model) => overlayRef.current.showModel(model);
+
+  const [emissionData, setEmissionData] = useState([])
+
+  const reloadEmissionData = () => {
+    setEmissionData(api.emissionEntries.get())
+  }
+
+  
 
   return (
     <>

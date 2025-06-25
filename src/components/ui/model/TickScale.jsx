@@ -3,12 +3,12 @@ import React from "react";
 import { Slider } from "../slider";
 import Scale from "./Scale";
 
-function TickScale() {
+function TickScale({value, setvalue}) {
   return (
     <div className="flex-1 inline-flex flex-col justify-start items-start">
       <div className="self-stretch h-10 flex flex-col justify-center items-center gap-2">
         <div className="self-stretch bg-base-secondary rounded-full flex flex-col justify-start items-start gap-2.5">
-          <Slider />
+          <Slider min={0} max={5000} onValueChange={(e)=> setvalue(e)}/>
         </div>
       </div>
       <Scale
