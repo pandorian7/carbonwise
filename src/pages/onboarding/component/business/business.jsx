@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./business.css";
+import { Button } from "@/components/ui/button";
 
 const Business = () => {
   const navigate = useNavigate();
@@ -17,10 +18,20 @@ const Business = () => {
     }));
   };
 
+  const isFormValid =
+    formData.businessName.trim() !== "" &&
+    formData.industryType.trim() !== "" &&
+    formData.employeeSize.trim() !== "" ;
+   
   const handleContinue = () => {
-    console.log("Form data:", formData);
-    navigate('/facilities');
+    if (isFormValid) {
+      navigate("/facilities");
+    } else {
+      alert("You should fill all details.");
+    }
   };
+
+  
 
  
 
@@ -179,9 +190,12 @@ const Business = () => {
 
           {/* Buttons */}
           <div className="button-section">
-            <button onClick={handleContinue} className="continue-button">
-              Continue
-            </button>
+             <Button
+  onClick={handleContinue}
+  className="continue-button"
+>
+  Continue
+</Button>
             
           </div>
         </div>

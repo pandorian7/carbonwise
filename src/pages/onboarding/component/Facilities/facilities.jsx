@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Button } from '@/components/ui/Button';
 import './facilities.css';
 
 const Facilities = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     primaryLocation: '',
-    locationSize: '',
+    Country: '',
     additionalLocations: '',
     ownershipType: '',
     buildingType: 'office'
@@ -19,9 +20,19 @@ const Facilities = () => {
     }));
   };
 
+  
+const isFormValid =
+    formData.primaryLocation.trim() !== "" &&
+    formData.Country.trim() !== "" &&
+    formData.additionalLocations.trim() !== "" &&
+    formData.ownershipType.trim() !== ""&&
+    formData.buildingType.trim() !== "";
   const handleContinue = () => {
-    console.log('Facilities data:', formData);
-    navigate('/energy');  // Navigate to energy page
+    if (isFormValid) {
+      navigate("/energy");
+    } else {
+      alert("You should fill all details.");
+    }
   };
 
 
@@ -101,8 +112,8 @@ const Facilities = () => {
               <label className="field-label">Country</label>
               <div className="select-container">
                 <select
-                  value={formData.buildingType}
-                  onChange={(e) => handleInputChange('buildingType', e.target.value)}
+                  value={formData.Country}
+                  onChange={(e) => handleInputChange('Country', e.target.value)}
                   className="facilities-select"
                 >
                   <option value="australia">Australia</option>
@@ -238,13 +249,13 @@ const Facilities = () => {
 
           {/* Buttons */}
           <div className="button-section">
-            <button
-              onClick={handleContinue}
-              className="continue-button"
-            >
-              Continue
-            </button>
-
+           
+ <Button
+  onClick={handleContinue}
+  className="continue-button"
+>
+  Continue
+</Button>
           </div>
         </div>
       </div>
