@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Progress } from "@/components/ui/progress"
-import { IconButton } from "@/components/ui/Button";
+import { IconButton } from "@/components/ui/button";
 import { PlusIcon, SparklesIcon } from "lucide-react";
 
 function Card({
