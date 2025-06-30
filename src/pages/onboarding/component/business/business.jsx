@@ -36,7 +36,7 @@ const Business = () => {
         industry: formData.industry,
         location: "",          // Optional
         country: "",           // Optional
-        employeeSize: formData.employeeSize
+        employeeSize: ""
       });
 
       alert("Business info saved successfully!");
