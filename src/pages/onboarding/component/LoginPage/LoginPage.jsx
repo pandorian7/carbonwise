@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 import "./LoginPage.css";
 
 const Login = () => {
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("https://carbonwise-backend-1.onrender.com/users/login", {
+        email: formData.email,
+        password: formData.password
+      });
+
+      alert("Login successful!");
+      // Optionally store token here: localStorage.setItem('token', response.data.token)
+      navigate('/dashboard');
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data ||
+        error.message;
+      alert("Login failed: " + errorMessage);
+    }
+  };
+
   const handleCreateClick = () => {
     navigate('/logged');
-  };
-  
-  const handleLoginClick = () => {
-    navigate('/dashboard');
   };
 
   return (
@@ -31,7 +61,7 @@ const Login = () => {
 
         <main className="main-content">
           <div className="content-wrapper">
-            <div className="form-container">
+            <form className="form-container"  onSubmit={handleSubmit}>
               <div className="form-header">
                 <h1 className="form-title">Login to CarbonWise</h1>
                 <p className="form-subtitle">
@@ -44,8 +74,11 @@ const Login = () => {
                   <label className="input-label">Email</label>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Enter your email"
-                    className="input-field bg-red-500"
+                    className="input-field"
+                    onChange={handleChange}
+                    required
                   />
                 </div>
 
@@ -56,32 +89,15 @@ const Login = () => {
                   </div>
                   <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     className="input-field"
+                    onChange={handleChange}
+                    required
                   />
                 </div>
 
-                <div className="remember-me">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="checkbox-icon"
-                  >
-                    <path
-                      d="M12.6667 2H3.33333C2.59695 2 2 2.59695 2 3.33333V12.6667C2 13.403 2.59695 14 3.33333 14H12.6667C13.403 14 14 13.403 14 12.6667V3.33333C14 2.59695 13.403 2 12.6667 2Z"
-                      stroke="#D6DDE6"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="remember-text">Remember me</span>
-                </div>
-
-                <button className="login-button" onClick={handleLoginClick}>Log In</button>
+                <button type="submit" className="login-button" >Log In</button>
               </div>
 
               <div className="divider">
@@ -130,15 +146,14 @@ const Login = () => {
                 </svg>
                 <span className="google-text">Google</span>
               </button>
-            </div>
 
-            <p className="signup-text">
-              Don't have an account?
-              <button className="signup-link" onClick={handleCreateClick}>Create Account</button>
-            </p>
+              <p className="signup-text">
+                Don't have an account?
+                <button className="signup-link" type="button" onClick={handleCreateClick}>Create Account</button>
+              </p>
+            </form>
           </div>
         </main>
-        
       </div>
     </div>
   );
