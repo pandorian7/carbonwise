@@ -12,6 +12,8 @@ import Scale from "../ui/model/Scale";
 
 import IATA_Codes from "./IATA_CODES.json";
 import { useState } from "react";
+import api from "@/lib/api";
+import { getUser } from "@/lib/auth";
 
 function TranspotationModel({ onClose }) {
   const [fuelType, setFuelType] = useState("Diesel");
@@ -34,24 +36,33 @@ function TranspotationModel({ onClose }) {
         method: fuelType,
         unit: fuelUnit,
         amount: fuelUsage[0],
+        date: new Date().toISOString().slice(0, 10),
+        user: getUser()
       },
       {
         data: "Business Air Travel",
-        iata_airport_from: BATFrom,
-        iata_airport_to: BATTo,
-        number_of_passengers: nPassengers,
+        type: "transport",
+        iataAirportFrom: BATFrom,
+        iataAirportTo: BATTo,
+        numberOfPassengers: nPassengers[0],
+        date: new Date().toISOString().slice(0, 10),
+        user: getUser()
       },
       {
         data: "Employee Commuting",
+        type: "transport",
         method: employeeCommutingMedium,
         unit: employeeCommutingUnit,
-        amount: employeeCommuting,
+        amount: employeeCommuting[0],
+        date: new Date().toISOString().slice(0, 10),
+        user: getUser()
       },
     ];
   };
 
   const submit = () => {
-    alert(JSON.stringify(createRequestBody()));
+    const bodies = createRequestBody();
+    api.emissionEntries.save.energy(bodies).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))
   };
 
   const description =
@@ -167,7 +178,7 @@ function TranspotationModel({ onClose }) {
           }}
           onChange={setEmployeeCommutingMedium}
         />
-        <TickScale onValueChange={setEmployeeCommuting} />
+        <TickScale setvalue={setEmployeeCommuting} value={employeeCommuting}/>
         <ModelEntryContainer>
           <Input
             disabled
