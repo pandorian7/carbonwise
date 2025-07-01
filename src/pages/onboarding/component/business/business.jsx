@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import { Button } from "@/components/ui/Button";
 import "./business.css";
 
@@ -24,28 +23,23 @@ const Business = () => {
     formData.industry.trim() !== "" &&
     formData.employeeSize.trim() !== "";
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     if (!isFormValid) {
       alert("You should fill all details.");
       return;
     }
 
-    try {
-      await axios.post("https://carbonwise-backend-1.onrender.com/businesses", {
+    // Save business info to localStorage for use on the facilities page
+    localStorage.setItem(
+      "businessInfo",
+      JSON.stringify({
         name: formData.name,
         industry: formData.industry,
-        location: "",          // Optional
-        country: "",           // Optional
-        employeeSize: ""
-      });
+        employeeSize: formData.employeeSize,
+      })
+    );
 
-      alert("Business info saved successfully!");
-      navigate("/facilities");
-    } catch (error) {
-      const errorMsg =
-        error.response?.data?.message || error.response?.data || error.message;
-      alert("Error saving business: " + errorMsg);
-    }
+    navigate("/facilities");
   };
 
   return (

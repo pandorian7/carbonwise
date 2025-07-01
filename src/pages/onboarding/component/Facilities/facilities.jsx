@@ -34,24 +34,33 @@ const Facilities = () => {
       return;
     }
 
+    // Get data from localStorage
+    const businessInfo = JSON.parse(localStorage.getItem('businessInfo') || '{}');
+
     try {
-      await axios.post("https://carbonwise-backend-1.onrender.com/businesses", {
+      await axios.post("https://carbonwise-backend-1.onrender.com/businesses/addBusiness", {
+        name: businessInfo.name,
+        industry: businessInfo.industry,
         location: formData.location,
         country: formData.country,
-        additionalLocations: "",
-        ownershipType: "",
-        buildingType: ""
+        additionalLocations: formData.additionalLocations,
+        ownershipType: formData.ownershipType,
+        buildingType: formData.buildingType
       });
 
       alert("Facilities data saved successfully!");
-      navigate("/energy"); // Adjust the route if needed
+      navigate("/energy");
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.response?.data || error.message;
+      const errorMsg =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        JSON.stringify(error.response?.data) ||
+        error.message;
+
       alert("Error saving facility data: " + errorMsg);
     }
   };
 
-  
 
 
   return (
