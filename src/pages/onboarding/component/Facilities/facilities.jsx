@@ -33,12 +33,12 @@ const Facilities = () => {
       alert("You should fill all details.");
       return;
     }
-
+     
     // Get data from localStorage
     const businessInfo = JSON.parse(localStorage.getItem('businessInfo') || '{}');
 
     try {
-      await axios.post("https://carbonwise-backend-1.onrender.com/businesses/addBusiness", {
+      const res = await axios.post("https://carbonwise-backend-1.onrender.com/businesses/addBusiness", {
         name: businessInfo.name,
         industry: businessInfo.industry,
         location: formData.location,
@@ -47,6 +47,12 @@ const Facilities = () => {
         ownershipType: formData.ownershipType,
         buildingType: formData.buildingType
       });
+
+   localStorage.setItem(
+      "facilitiesInfo",
+      JSON.stringify(res.data)
+    );
+
 
       alert("Facilities data saved successfully!");
       navigate("/energy");
