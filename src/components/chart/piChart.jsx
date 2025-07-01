@@ -1,5 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pie, PieChart, Cell } from "recharts";
+import api from "../../lib/api";
+
+const COLOR_MAP = {
+  Electricity: "#2563eb", // Blue
+  Transport: "#ef4444", // Red
+  Waste: "#f59e0b", // Yellow
+  Water: "#8b5cf6", // Purple
+  "Purchased Goods": "#10b981", // Green
+  Others: "#374151", // Gray
+};
 
 const initialChartData = [
   { name: "Electricity", value: 450, color: "#2563eb" }, // Blue
@@ -11,7 +21,26 @@ const initialChartData = [
 ];
 
 export default function EmissionsChart() {
-  const [chartData] = useState(initialChartData);
+  const [chartData, setChartData] = useState(initialChartData);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.emissionWithSource.get();
+        const data = Array.isArray(response) && response.length > 0 ? response : initialChartData;
+        //if the emissionWithSource gives nothing it will be same as initialChartData, but I have no ideas whether its ok not...
+        const dataWithColors = data.map((item) => ({
+          ...item,
+          color: COLOR_MAP[item.name] || "#374151",
+        }));
+        setChartData(dataWithColors);
+      } catch (error) {
+        console.error("Error fetching emissions data:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
