@@ -6,19 +6,33 @@ import { PanelLeftIcon, SearchIcon } from "lucide-react";
 import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
 
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
+import EmissionsChart from "@/components/chart/piChart";
+
+{/*Recommendation list */}
+const RECOMMENDATIONS = [
+  "Switch to LED lighting in office spaces.",
+  "Optimize delivery routes to reduce fuel usage.",
+  "Start a waste separation system for recycling.",
+  "Switch to LED lighting in office spaces."
+];
 
 function Dashboard() {
 
   const [totalEmmision, setTotalEmmision] = useState(15.11);
 
+  {/*Goal progress*/}
   const currentGoalProgress = 1789;
   const totalGoalForProgress = 2500;
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
+  {/*Emmision per employee*/}
   const currentEmissions = 50;
   const benchmarkEmissions = 110;
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
+
+
+  {/*month emission data dict*/}
   const emissionsData = [
     { month: 'Jan', value: 300 },
     { month: 'Feb', value: 180 },
@@ -31,6 +45,7 @@ function Dashboard() {
 
   const totalChartEmissions = emissionsData.reduce((sum, data) => sum + data.value, 0);
 
+  {/*Chart hight*/}
   const CHART_HEIGHT = 192;
   const CHART_WIDTH = 1440;
 
@@ -192,21 +207,30 @@ function Dashboard() {
       {/*Graph */}
       <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 my-6 mx-6">
         <div className="self-stretch inline-flex justify-center items-center gap-2">
-          <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Total Emissions</div>
-          <div className="flex-1 text-right justify-start text-lime-400 text-sm font-medium font-['Inter'] leading-tight">+{totalEmmision}%</div>
+          <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">
+            Total Emissions
+          </div>
+          <div className="flex-1 text-right justify-start text-lime-400 text-sm font-medium font-['Inter'] leading-tight">
+            +{totalEmmision}%
+          </div>
         </div>
         <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">
           {Intl.NumberFormat('en-US').format(totalChartEmissions)} kg CO₂e
         </div>
 
         <div className="self-stretch py-6 flex flex-col justify-start items-start gap-2.5">
-          <div data-show-grid="true" data-show-legend="false" data-type="Linear" className="self-stretch h-48 flex flex-col justify-end items-center gap-9">
+          <div
+            data-show-grid="true"
+            data-show-legend="false"
+            data-type="Linear"
+            className="self-stretch h-48 flex flex-col justify-end items-center gap-9"
+          >
             <div className="self-stretch flex-1 relative">
               <svg
                 width="100%"
                 height="100%"
-                viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 1440 192" 
+                preserveAspectRatio="none"
                 className="absolute left-0 top-0"
               >
                 {yAxisGridLines}
@@ -249,7 +273,7 @@ function Dashboard() {
                   <text
                     key={`month-label-${data.month}`}
                     x={xScale(index)}
-                    y={CHART_HEIGHT - PADDING_BOTTOM + 20}
+                    y={192 - 20} 
                     textAnchor="middle"
                     fill="#9CA3AF"
                     fontSize="10"
@@ -259,69 +283,18 @@ function Dashboard() {
                 ))}
 
                 {yAxisLabels}
-
               </svg>
             </div>
           </div>
         </div>
       </div>
 
+
+
       <div className="self-stretch p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border flex justify-start items-start gap-6 mx-6">
-        <div className="flex-1 min-w-80 flex flex-col justify-start items-start gap-3">
-          <div className="self-stretch flex justify-between items-center gap-2">
-            <div className="flex-1 text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Where Your Emissions Come From</div>
-            <div className="flex-1 text-right text-lime-400 text-sm font-medium font-['Inter'] leading-tight">+25.66%</div>
-          </div>
-          <div className="self-stretch py-2 flex flex-wrap content-center justify-start items-center gap-3">
-            <div className="px-2 flex justify-center items-center gap-2.5">
-              <div data-show-text="false" data-type="Basic" className="w-36 h-36 flex flex-col justify-center items-center gap-7">
-                <div data-stroke="No" className="w-36 h-36 relative">
-                  <div className="w-36 h-36 left-0 top-0 absolute bg-base-chart-1 rounded-full" />
-                  <div className="w-36 h-36 left-0 top-0 absolute bg-base-chart-5 rounded-full" />
-                  <div className="w-36 h-36 left-0 top-0 absolute bg-base-chart-4 rounded-full" />
-                  <div className="w-36 h-36 left-0 top-0 absolute bg-base-chart-3 rounded-full" />
-                  <div className="w-36 h-36 left-0 top-0 absolute bg-base-chart-2 rounded-full" />
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 min-w-80 flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-base-chart-1 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Electricity</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-pink-600 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Transport</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-orange-400 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Waste</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Water</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Purchased Goods</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-              <div className="self-stretch inline-flex justify-center items-center gap-2">
-                <div className="w-2 h-2 bg-base-chart-1 rounded-full" />
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Others</div>
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">450 kg CO₂e</div>
-                <div className="w-12 justify-start text-Text-Secondary/80 text-sm font-medium font-['Inter'] leading-none">36%</div>
-              </div>
-            </div>
+        <div className="flex-1 min-w-80 flex flex-col justify-between gap-6">
+          <div className="flex-1 flex flex-col justify-between gap-4">
+            <EmissionsChart />
           </div>
         </div>
 
@@ -334,20 +307,17 @@ function Dashboard() {
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-2">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2">
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Switch to LED lighting in office spaces.</div>
-                <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
-              </div>
-
-              <div className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2">
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Optimize delivery routes to reduce fuel usage.</div>
-                <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
-              </div>
-
-              <div className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2">
-                <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">Start a waste separation system for recycling.</div>
-                <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
-              </div>
+              {RECOMMENDATIONS.map((rec, idx) => (
+                <div
+                  key={idx}
+                  className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2"
+                >
+                  <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">
+                    {rec}
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
+                </div>
+              ))}
             </div>
             <div className="self-stretch flex flex-col justify-center items-start gap-2">
               <div className="self-stretch justify-start text-base-muted-foreground text-sm font-normal font-['Inter'] leading-none">*Based on your recent data</div>
