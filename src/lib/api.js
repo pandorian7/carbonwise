@@ -15,7 +15,7 @@ async function getEmissionEntries() {
 
 async function saveEnerygEmissionData(data) {
   const pool = data.map((element) =>
-    apiClient.post("/emission_entries", element)
+    apiClient.post("/emission_entries/addEmissionEntry", element)
   );
 
   await Promise.all(pool);
