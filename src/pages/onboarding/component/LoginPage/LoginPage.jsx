@@ -20,13 +20,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
       const response = await axios.post("https://carbonwise-backend-1.onrender.com/users/login", {
-        email: formData.email,
-        password: formData.password
-      });
+  email: formData.email,
+  password: formData.password
+});
 
+ console.log(response.data);
       alert("Login successful!");
       // Optionally store token here: localStorage.setItem('token', response.data.token)
       navigate('/dashboard');
