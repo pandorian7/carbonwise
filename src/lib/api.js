@@ -24,6 +24,6 @@ async function saveEnerygEmissionData(data) {
 export default {
   emissionEntries: {
     get: getEmissionEntries,
-    save: { energy: saveEnerygEmissionData },
+    save: saveEnerygEmissionData,
   },
 };

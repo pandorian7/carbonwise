@@ -12,11 +12,11 @@ import { PlusIcon } from "lucide-react";
 function WaterManagement({state, update}) {
   const items = {
     consumption: {
-      municipal: "Municipal Supply",
-      groundwater: "Groundwater",
-      surfacewater: "Surface Water",
-      rainwater: "Rainwater Harvesting",
-      recycled: "Recycled Water",
+      "Municipal Supply": "Municipal Supply",
+      "Groundwater": "Groundwater",
+      "Surface Water": "Surface Water",
+      "Rainwater Harvesting": "Rainwater Harvesting",
+      "Recycled Water": "Recycled Water",
     },
     treatment: {
         municipal: "Municipal Treatment Plant",

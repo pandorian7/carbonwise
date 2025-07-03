@@ -12,15 +12,15 @@ import { PlusIcon } from "lucide-react";
 function WasteGeneration({ state, update }) {
   const items = {
     waste: {
-      general: "General Waste",
-      paper: "Paper/Cardboard",
-      plastics: "Plastics",
-      organic_food: "Organic/Food",
-      glass: "Glass",
-      electronic: "Electronic",
-      hazard: "Hazardous",
-      construction: "Construction",
-      other: "Other",
+      "General Waste": "General Waste",
+      "Paper/Cardboard": "Paper/Cardboard",
+      "Plastic": "Plastics",
+      "Organic/Food": "Organic/Food",
+      "Glass": "Glass",
+      "Electronic": "Electronic",
+      // hazard: "Hazardous",
+      "Construction": "Construction",
+      "Other": "Other",
     },
     disposal: {
       Landfilled: "Landfill",

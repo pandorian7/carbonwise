@@ -62,7 +62,7 @@ function TranspotationModel({ onClose }) {
 
   const submit = () => {
     const bodies = createRequestBody();
-    api.emissionEntries.save.energy(bodies).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))
+    api.emissionEntries.save(bodies).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))
   };
 
   const description =
