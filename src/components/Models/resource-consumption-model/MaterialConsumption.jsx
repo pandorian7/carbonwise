@@ -9,7 +9,7 @@ import { SelectExt } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
 
-function MaterialConsumption() {
+function MaterialConsumption({ state, update }) {
   return (
     <>
       <ModelEntry title={"Raw Materials Input"}>
@@ -19,38 +19,41 @@ function MaterialConsumption() {
           items={{
             Steel: "Steel",
             Aluminium: "Aluminium",
-            Plastic: "Plastic"
+            Plastic: "Plastic",
           }}
+          onChange={update("raw.type")}
         />
-        <TickScale />
+        <TickScale setvalue={update("raw.amount")}/>
         <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["kg", "MMBtu"]} selected={"kg"} />
+          <Input disabled className="w-24 disabled:bg-base-background" value={state.raw.amount[0]}/>
+          <ToggleGroup options={["kg", "MMBtu"]} selected={"kg"} onChange={update("raw.unit")}/>
         </ModelEntryContainer>
       </ModelEntry>
       <ModelEntry title={"Packaging Materials"}>
         <SelectExt
           widthClass="w-50"
           placeholder="Material Type"
-          items={{"Paper/Cardboard":"Paper/Cardboard",
+          items={{
+            "Paper/Cardboard": "Paper/Cardboard",
             "Plastic (HDPE)": "Plastic (HDPE)",
-            "Plastic (PET)":"Plastic (PET)",
-            "Glass":"Glass",
-            "Metal":"Metal",
-            "Composite":"Composite",
-            "Bio-based":"Bio-based",
-            "Other": "Other"
+            "Plastic (PET)": "Plastic (PET)",
+            Glass: "Glass",
+            Metal: "Metal",
+            Composite: "Composite",
+            "Bio-based": "Bio-based",
+            Other: "Other",
           }}
+          onChange={update("packaging.type")}
         />
-        <TickScale />
+        <TickScale setvalue={update("packaging.amount")}/>
         <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["hrs", "kms"]} selected={"hrs"} />
+          <Input disabled className="w-24 disabled:bg-base-background" value={state.packaging.amount[0]}/>
+          <ToggleGroup options={["hrs", "kms"]} selected={"hrs"} onChange={update("packaging.unit")}/>
         </ModelEntryContainer>
       </ModelEntry>
-      <IconButton Icon={PlusIcon} variant="secondaryOutlined">
+      {/* <IconButton Icon={PlusIcon} variant="secondaryOutlined">
         Add a new commute method
-      </IconButton>
+      </IconButton> */}
     </>
   );
 }

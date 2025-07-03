@@ -9,7 +9,7 @@ import ToggleGroup from "@/components/ui/ToggleGroup";
 import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
 
-function WaterManagement() {
+function WaterManagement({state, update}) {
   const items = {
     consumption: {
       municipal: "Municipal Supply",
@@ -27,6 +27,7 @@ function WaterManagement() {
         none: "No Treatment"
     }
   };
+  console.log(state)
   return (
     <>
       <ModelEntry title={"Total Water Consumption"}>
@@ -34,16 +35,17 @@ function WaterManagement() {
           placeholder="Primary Water Source"
           items={items.consumption}
           widthClass="w-46"
+          onChange={update("source")}
         />
-        <TickScale />
+        <TickScale setvalue={update("amount")}/>
         <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["m3", "Liters"]} selected={"m3"} />
+          <Input disabled className="w-24 disabled:bg-base-background" value={state.amount[0]}/>
+          <ToggleGroup options={["m3", "Liters"]} selected={"m3"} onChange={update("unit")}/>
         </ModelEntryContainer>
       </ModelEntry>
-      <IconButton Icon={PlusIcon} variant="secondaryOutlined">
+      {/* <IconButton Icon={PlusIcon} variant="secondaryOutlined">
         Add new source
-      </IconButton>
+      </IconButton> */}
 
       {/* <ModelEntry title={"Wastewater Treatment"}>
         <SelectExt

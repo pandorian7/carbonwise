@@ -9,7 +9,7 @@ import { SelectExt } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
 
-function WasteGeneration() {
+function WasteGeneration({ state, update }) {
   const items = {
     waste: {
       general: "General Waste",
@@ -20,18 +20,18 @@ function WasteGeneration() {
       electronic: "Electronic",
       hazard: "Hazardous",
       construction: "Construction",
-      "other": "Other"
+      other: "Other",
     },
     disposal: {
-        "Landfilled": "Landfill",
-        // incineration: "Incineration",
-        "Recycled": "Recycling",
-        "Composted": "Composting",
-        "Combusted": "Combusting"
-        // reuse: "Reuse",
-        // digestion: "Anaerobic Digestion",
-        // recovery: "Advanced Recovery"
-    }
+      Landfilled: "Landfill",
+      // incineration: "Incineration",
+      Recycled: "Recycling",
+      Composted: "Composting",
+      Combusted: "Combusting",
+      // reuse: "Reuse",
+      // digestion: "Anaerobic Digestion",
+      // recovery: "Advanced Recovery"
+    },
   };
   return (
     <>
@@ -49,13 +49,23 @@ function WasteGeneration() {
 
       <ModelEntry title={"Waste Selection"}>
         <div className="flex flex-col gap-3">
-          <SelectExt placeholder="Waste Category" items={items.waste} widthClass="w-38"/>
-        <SelectExt placeholder="Disposal Method" items={items.disposal} widthClass="w-38"/>
+          <SelectExt
+            placeholder="Waste Category"
+            items={items.waste}
+            widthClass="w-38"
+            onChange={update("category")}
+          />
+          <SelectExt
+            placeholder="Disposal Method"
+            items={items.disposal}
+            widthClass="w-38"
+            onChange={update("disposal")}
+          />
         </div>
-        <TickScale />
+        <TickScale setvalue={update("amount")}/>
         <ModelEntryContainer>
-          <Input disabled className="w-24 disabled:bg-base-background" />
-          <ToggleGroup options={["kg", "tons"]} selected={"kg"} />
+          <Input disabled className="w-24 disabled:bg-base-background" value={state.amount[0]}/>
+          <ToggleGroup options={["kg", "tons"]} selected={"kg"} onChange={update("unit")}/>
         </ModelEntryContainer>
       </ModelEntry>
       {/* <IconButton Icon={PlusIcon} variant="secondaryOutlined">
