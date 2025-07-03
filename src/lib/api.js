@@ -20,8 +20,9 @@ apiClient.interceptors.request.use((config) => {
 });
 
 async function getEmissionEntries() {
-  const res = await apiClient.get("/emission_entries");
-  return res.data
+  const user = getUser();
+  const res = await apiClient.get(`/emission_entries/getUserById/${user.id}`);
+  console.log(res.data);
 }
 
 async function saveEnerygEmissionData(data) {
@@ -32,22 +33,9 @@ async function saveEnerygEmissionData(data) {
   await Promise.all(pool);
 }
 
-async function login(email, password) {
-  const res = await apiClient.post("/users/login", { email, password });
-  const { token } = res.data;
-  return token;
-}
-
-async function getRecommendations() {
-  const res = await apiClient('/recommendations');
-  return res.data;
-}
-
 export default {
   emissionEntries: {
     get: getEmissionEntries,
     save: saveEnerygEmissionData,
   },
-  user: { login },
-  recommendations: {get: getRecommendations}
 };
