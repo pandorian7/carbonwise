@@ -1,10 +1,16 @@
 import { ChevronsUpDownIcon } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { getAuth } from "@/contexts/auth-context";
 
 function UserDropDown({
   name = "name",
   email = "email@example.com",
   icon = "https://placehold.co/32x32",
 }) {
+  const { setToken } = getAuth();
+
+  const onLogOut = () => setToken(null)
+
   return (
     <div className="w-64 p-2 bottom-2 left-0 absolute flex flex-col justify-start items-start gap-2">
       <div
@@ -33,10 +39,13 @@ function UserDropDown({
           className="w-4 h-4 relative flex justify-center items-center"
         >
           <div className="w-4 h-4 left-0 top-0 absolute overflow-hidden">
-            <ChevronsUpDownIcon className="text-base-foreground icon16" />
+            {/* <ChevronsUpDownIcon className="text-base-foreground icon16" /> */}
           </div>
         </div>
       </div>
+      <Button variant="defaultOutlined" className="w-full my-2" onClick={onLogOut}>
+        Logout
+      </Button>
     </div>
   );
 }

@@ -6,9 +6,9 @@ const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useLocalStorageState("token", {defaultValue: null});
 
-  const user = {id: token.id, email: token.email};
+  const user = token ? {id: token.id, email: token.email}: null;
 
-  const business = {id: token.business.id, name: token.business.name}
+  const business = token ? {id: token.business.id, name: token.business.name}: null
   return (
     <AuthContext.Provider value={{ token, setToken, user, business }}>
       {children}
