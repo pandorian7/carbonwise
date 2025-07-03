@@ -27,7 +27,6 @@ function WaterManagement({state, update}) {
         none: "No Treatment"
     }
   };
-  console.log(state)
   return (
     <>
       <ModelEntry title={"Total Water Consumption"}>

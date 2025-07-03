@@ -20,7 +20,6 @@ const Energy = () => {
   };
 
   const handleSkip = () => {
-    console.log("Form data:", formData);
     navigate('/transportation');
   };
 

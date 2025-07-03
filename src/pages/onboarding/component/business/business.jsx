@@ -18,7 +18,6 @@ const Business = () => {
   };
 
   const handleContinue = () => {
-    console.log("Form data:", formData);
     navigate('/facilities');
   };
 

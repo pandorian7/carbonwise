@@ -20,7 +20,6 @@ const Facilities = () => {
   };
 
   const handleContinue = () => {
-    console.log('Facilities data:', formData);
     navigate('/energy');  // Navigate to energy page
   };
 
