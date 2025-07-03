@@ -26,7 +26,7 @@ async function getEmmisionWithSource() {
   //const user = getUser();
   //Implement the API call here
   //I add this dummy return to avoid error
-  console.log("run");
+  console.log("executed getEmmisionWithSource");
   return [
     { name: "Electricity", value: 600 },
     { name: "Transport", value: 300 },
@@ -37,6 +37,21 @@ async function getEmmisionWithSource() {
   ];
 }
 
+//This function is for the Line chart
+async function getTotalEmmisionMonthWise() {
+  console.log("executed getTotalEmmisionMonthWise");
+
+  return[
+    { month: 'Jan', value: 300 },
+    { month: 'Feb', value: 180 },
+    { month: 'Mar', value: 250 },
+    { month: 'Apr', value: 100 },
+    { month: 'May', value: 300 },
+    { month: 'Jun', value: 280 },
+    { month: 'Jly', value: 200 },
+  ];
+}
+
 export default {
   emissionEntries: {
     get: getEmissionEntries,
@@ -44,5 +59,8 @@ export default {
   },
   emissionWithSource: {
     get: getEmmisionWithSource,
+  },
+  emmisionMonthWise:{
+    get: getTotalEmmisionMonthWise,
   },
 };

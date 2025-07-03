@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
@@ -6,9 +6,11 @@ import { PanelLeftIcon, SearchIcon } from "lucide-react";
 import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
 
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
+import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
+import api from "@/lib/api";
 
-{/*Recommendation list */}
+{/*Recommendation list */ }
 const RECOMMENDATIONS = [
   "Switch to LED lighting in office spaces.",
   "Optimize delivery routes to reduce fuel usage.",
@@ -19,97 +21,36 @@ const RECOMMENDATIONS = [
 function Dashboard() {
 
   const [totalEmmision, setTotalEmmision] = useState(15.11);
+  const [emissionsData, SetEmissionsData] = useState([]);
+  const [totalChartEmissions, SetTotalChartEmissions] = useState(0)
 
-  {/*Goal progress*/}
+  {/*Goal progress*/ }
   const currentGoalProgress = 1789;
   const totalGoalForProgress = 2500;
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
-  {/*Emmision per employee*/}
+  {/*Emmision per employee*/ }
   const currentEmissions = 50;
   const benchmarkEmissions = 110;
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
 
 
-  {/*month emission data dict*/}
-  const emissionsData = [
-    { month: 'Jan', value: 300 },
-    { month: 'Feb', value: 180 },
-    { month: 'Mar', value: 250 },
-    { month: 'Apr', value: 100 },
-    { month: 'May', value: 300 },
-    { month: 'Jun', value: 280 },
-    { month: 'Jly', value: 180 },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.emmisionMonthWise.get();
+        const data = Array.isArray(response) && response.length > 0 ? response : [];
+        SetEmissionsData(data);
+        const totalChartEmissions = emissionsData.reduce((sum, data) => sum + data.value, 0);
+        SetTotalChartEmissions(total);
+      } catch (error) {
+        console.error("Error fetching emissions data:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
-  const totalChartEmissions = emissionsData.reduce((sum, data) => sum + data.value, 0);
-
-  {/*Chart hight*/}
-  const CHART_HEIGHT = 192;
-  const CHART_WIDTH = 1440;
-
-  const PADDING_TOP = 20;
-  const PADDING_RIGHT = 20;
-  const PADDING_BOTTOM = 40;
-  const PADDING_LEFT = 40;
-
-  const innerChartWidth = CHART_WIDTH - PADDING_LEFT - PADDING_RIGHT;
-  const innerChartHeight = CHART_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
-
-  const allValues = emissionsData.map(d => d.value);
-  const maxValue = Math.max(...allValues);
-  const minValue = 0;
-
-  const yScale = (value) => {
-    return PADDING_TOP + innerChartHeight - ((value - minValue) / (maxValue - minValue)) * innerChartHeight;
-  };
-
-  const xScale = (index) => {
-    return PADDING_LEFT + (index / (emissionsData.length - 1)) * innerChartWidth;
-  };
-
-  const linePath = emissionsData.map((data, index) => {
-    const x = xScale(index);
-    const y = yScale(data.value);
-    return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
-  }).join(' ');
-
-  const numYAxisLines = 5;
-  const yAxisLabels = [];
-  const yAxisGridLines = [];
-  const yAxisValueStep = Math.ceil(maxValue / (numYAxisLines - 1) / 100) * 100;
-
-  for (let i = 0; i < numYAxisLines; i++) {
-    const labelValue = i * yAxisValueStep;
-    const y = yScale(labelValue);
-
-    yAxisGridLines.push(
-      <line
-        key={`grid-y-${i}`}
-        x1={PADDING_LEFT}
-        y1={y}
-        x2={CHART_WIDTH - PADDING_RIGHT}
-        y2={y}
-        stroke="#4B5563"
-        strokeWidth="0.5"
-        strokeOpacity="0.8"
-      />
-    );
-
-    yAxisLabels.push(
-      <text
-        key={`label-y-${i}`}
-        x={PADDING_LEFT - 10}
-        y={y + 4}
-        textAnchor="end"
-        fill="#9CA3AF"
-        fontSize="10"
-      >
-        {labelValue}
-      </text>
-    );
-  }
 
 
   return (
@@ -218,75 +159,7 @@ function Dashboard() {
           {Intl.NumberFormat('en-US').format(totalChartEmissions)} kg CO₂e
         </div>
 
-        <div className="self-stretch py-6 flex flex-col justify-start items-start gap-2.5">
-          <div
-            data-show-grid="true"
-            data-show-legend="false"
-            data-type="Linear"
-            className="self-stretch h-48 flex flex-col justify-end items-center gap-9"
-          >
-            <div className="self-stretch flex-1 relative">
-              <svg
-                width="100%"
-                height="100%"
-                viewBox="0 0 1440 192" 
-                preserveAspectRatio="none"
-                className="absolute left-0 top-0"
-              >
-                {yAxisGridLines}
-
-                <path
-                  d={linePath}
-                  fill="none"
-                  stroke="#84CC16"
-                  strokeWidth="2"
-                />
-
-                {emissionsData.map((data, index) => {
-                  const x = xScale(index);
-                  const y = yScale(data.value);
-                  const isLastPoint = index === emissionsData.length - 1;
-                  return (
-                    <g key={`point-${data.month}`}>
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={isLastPoint ? 4 : 2}
-                        fill={isLastPoint ? "#84CC16" : "#84CC16"}
-                      />
-                      {isLastPoint && (
-                        <text
-                          x={x}
-                          y={y - 10}
-                          textAnchor="middle"
-                          fill="#F9FAFB"
-                          fontSize="12"
-                        >
-                          {Intl.NumberFormat('en-US').format(data.value)}
-                        </text>
-                      )}
-                    </g>
-                  );
-                })}
-
-                {emissionsData.map((data, index) => (
-                  <text
-                    key={`month-label-${data.month}`}
-                    x={xScale(index)}
-                    y={192 - 20} 
-                    textAnchor="middle"
-                    fill="#9CA3AF"
-                    fontSize="10"
-                  >
-                    {data.month}
-                  </text>
-                ))}
-
-                {yAxisLabels}
-              </svg>
-            </div>
-          </div>
-        </div>
+        <LineChart emissionsData={emissionsData} />
       </div>
 
 
