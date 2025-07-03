@@ -106,3 +106,53 @@ export function saveEmissionDataCategoriesToLocalStorage() {
 
     return null;
 }
+
+
+export function saveDashboardRecommendationSummery() {
+  const [recommendations, setRecommendations] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.recommendations.get();
+        const data = Array.isArray(response) && response.length > 0 ? response : [];
+        setRecommendations(data);
+        processTopCategoryRecommendations(data);
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const processTopCategoryRecommendations = (allRecommendations) => {
+    const rawData = localStorage.getItem("categoryEmissions");
+    if (!rawData) return;
+
+    const categoryEmissions = JSON.parse(rawData);
+
+    const topTwoCategories = categoryEmissions
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 1)
+      .map(item => item.name);
+
+    const selectedTitles = [];
+
+    topTwoCategories.forEach(categoryName => {
+      const filtered = allRecommendations.filter(rec =>
+        rec.emissionEntry?.type === categoryName
+      );
+
+      const shuffled = filtered.sort(() => 0.5 - Math.random());
+      const titles = shuffled.slice(0, 4).map(rec => rec.title);
+      selectedTitles.push(...titles);
+    });
+
+    localStorage.setItem("dashboardRecommendations", JSON.stringify(selectedTitles));
+    console.log("Saved dashboard recommendation titles:", selectedTitles);
+  };
+
+  return null;
+}
+

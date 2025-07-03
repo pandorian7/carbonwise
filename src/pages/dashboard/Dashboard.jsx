@@ -9,15 +9,7 @@ import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from '
 import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
 import api from "@/lib/api";
-import {saveEmissionDataCategoriesToLocalStorage} from '@/lib/utilsDashboard';
-
-{/*Recommendation list */ }
-const RECOMMENDATIONS = [
-  "Switch to LED lighting in office spaces.",
-  "Optimize delivery routes to reduce fuel usage.",
-  "Start a waste separation system for recycling.",
-  "Switch to LED lighting in office spaces."
-];
+import {saveEmissionDataCategoriesToLocalStorage, saveDashboardRecommendationSummery} from '@/lib/utilsDashboard';
 
 function Dashboard() {
 
@@ -37,6 +29,10 @@ function Dashboard() {
   saveEmissionDataCategoriesToLocalStorage()
   const monthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions"));
   const total = JSON.parse(localStorage.getItem("totalEmissions"));
+
+  saveDashboardRecommendationSummery();
+
+  const RECOMMENDATIONS = JSON.parse(localStorage.getItem("dashboardRecommendations"));
 
   return (
     <>

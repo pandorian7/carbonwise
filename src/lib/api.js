@@ -1,4 +1,7 @@
 import axios from "axios";
+import { getUser } from "./auth";
+
+console.log(import.meta.env.VITE_API_URL);
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -33,9 +36,29 @@ async function saveEnerygEmissionData(data) {
   await Promise.all(pool);
 }
 
+//This function is for the PI chart
+async function getEmmisionWithSource() {
+  //const user = getUser();
+  //Implement the API call here
+  //I add this dummy return to avoid error
+  console.log("executed getEmmisionWithSource");
+  return [
+    { name: "Electricity", value: 600 },
+    { name: "Transport", value: 300 },
+    { name: "Waste", value: 200 },
+    { name: "Water", value: 100 },
+    { name: "Material", value: 150 },
+    { name: "Others", value: 50 },
+  ];
+}
+
+
 export default {
   emissionEntries: {
     get: getEmissionEntries,
-    save: saveEnerygEmissionData,
+    save: { energy: saveEnerygEmissionData },
+  },
+    emissionWithSource: {
+    get: getEmmisionWithSource,
   },
 };
