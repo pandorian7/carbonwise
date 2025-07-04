@@ -9,15 +9,13 @@ import TranspotationModel from "@/components/Models/TranspotationModel";
 import ResourceConsumptionModel from "@/components/Models/ResourceConsumptionModel";
 
 import { useRef } from "react";
-import api from "@/lib/api";
+import { Input } from "@/components/ui/input";
 
-function ActiveCalculation() {
+function ActiveCalculation({reportName, setReportName}) {
   const overlayRef = useRef(null);
 
   const showModel = (model) => overlayRef.current.showModel(model);
-  
 
-  
 
   return (
     <>
@@ -28,11 +26,7 @@ function ActiveCalculation() {
             <div className="justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
               Report Name:
             </div>
-            <div className="flex-1 px-3 py-2 bg-white/5 rounded-lg outline  outline-offset-[-1px] outline-white/20 flex justify-start items-center gap-2">
-              <div className="flex-1 justify-start text-gray-300/40 text-base font-medium font-['Plus_Jakarta_Sans'] leading-tight">
-                [Company Name] Carbon Assessment - [Date]
-              </div>
-            </div>
+              <Input placeholder="Report Name" value={reportName} onChange={(e)=>setReportName(e.target.value)}/>
           </div>
           <div className="self-stretch px-5 py-4 rounded-2xl outline  outline-offset-[-1px] outline-base-border inline-flex justify-end items-center gap-3">
             <div className="flex-1 inline-flex flex-col justify-start items-start gap-1">
