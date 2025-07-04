@@ -6,7 +6,7 @@ import ColorPill from "./ColorPill";
 
 function Card({title, content: {carbonImapct=0, benefits=0, paybackPerios=0, difficulty="Low" }}) {
   return (
-    <div className="flex-1 max-w-96 min-w-72 mx-auto p-4 rounded-2xl outline outline-offset-[-1px] outline-base-border inline-flex flex-col justify-center items-start gap-3 overflow-hidden">
+    <div className="flex-1 max-w-96 min-w-72  p-4 rounded-2xl outline outline-offset-[-1px] outline-base-border inline-flex flex-col justify-center items-start gap-3 overflow-hidden">
       <div className="self-stretch justify-start text-white text-sm font-bold font-['Plus_Jakarta_Sans'] leading-tight">
         {title}
       </div>

@@ -1,43 +1,75 @@
-import { SigmaIcon, FileChartLineIcon, Settings2Icon, LightbulbIcon, LayoutDashboardIcon, CrownIcon, ArrowRightIcon } from "lucide-react";
+import {
+  SigmaIcon,
+  FileChartLineIcon,
+  Settings2Icon,
+  LightbulbIcon,
+  LayoutDashboardIcon,
+  CrownIcon,
+  ArrowRightIcon,
+} from "lucide-react";
 import { useNavigate } from "react-router";
 
 import SidebarItem from "./ui/SidebarItem";
 import UserDropDown from "./ui/UserDropDown";
 import Logo from "./Logo";
+import { getAuth } from "@/contexts/auth-context";
 
+function Sidebar({ activeView, changeView }) {
+  const { user } = getAuth();
 
-function Sidebar({activeView, changeView}) {
   const navigate = useNavigate();
-  
+
   // For demo purposes - in real app, this would come from user context/auth
   const isFreePlan = true; // Change this based on user's actual plan
 
-  const addBehaviour = (n) => {return {onClick:changeView(n), active:activeView==n}}
+  const addBehaviour = (n) => {
+    return { onClick: changeView(n), active: activeView == n };
+  };
 
   const handleUpgradeClick = () => {
-    navigate('/pricing');
+    navigate("/pricing");
   };
 
   return (
     <div className="w-64 self-stretch relative border-r inline-flex flex-col justify-start items-start">
       <div className="self-stretch p-2 flex flex-col justify-start items-start gap-2">
-        <Logo/>
+        <Logo />
       </div>
       <div className="self-stretch flex-1 flex flex-col justify-start items-start gap-2">
         <div className="self-stretch p-2 flex flex-col justify-start items-start">
           <div className="self-stretch flex flex-col justify-start items-start gap-1">
-            <SidebarItem title="Dashboard" Icon={LayoutDashboardIcon} {...addBehaviour(1)}/>
-            <SidebarItem title="Carbon Calculator" Icon={SigmaIcon} {...addBehaviour(2)}/>
-            <SidebarItem title="Recommendations" Icon={LightbulbIcon} {...addBehaviour(3)}/>
-            <SidebarItem title="Reports & Analysis" Icon={FileChartLineIcon} {...addBehaviour(4)}/>
-            <SidebarItem title="Settings" Icon={Settings2Icon} {...addBehaviour(5)}/>
+            <SidebarItem
+              title="Dashboard"
+              Icon={LayoutDashboardIcon}
+              {...addBehaviour(1)}
+            />
+            <SidebarItem
+              title="Carbon Calculator"
+              Icon={SigmaIcon}
+              {...addBehaviour(2)}
+            />
+            <SidebarItem
+              title="Recommendations"
+              Icon={LightbulbIcon}
+              {...addBehaviour(3)}
+            />
+            <SidebarItem
+              title="Reports & Analysis"
+              Icon={FileChartLineIcon}
+              {...addBehaviour(4)}
+            />
+            <SidebarItem
+              title="Settings"
+              Icon={Settings2Icon}
+              {...addBehaviour(5)}
+            />
           </div>
         </div>
       </div>
-      
+
       {/* Upgrade Banner for Free Plan Users */}
       {isFreePlan && (
-        <div className="self-stretch p-3  mb-16">
+        <div className="self-stretch p-3  mb-36">
           <div className="p-4 bg-gradient-to-br from-lime-400/10 to-lime-600/10 border border-lime-400/20 rounded-xl">
             <div className="flex items-start gap-3 mb-3">
               <div className="w-8 h-8 bg-lime-400/20 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -48,11 +80,12 @@ function Sidebar({activeView, changeView}) {
                   Unlock Premium Features
                 </h4>
                 <p className="text-xs text-base-muted-foreground leading-relaxed">
-                  Get personalized recommendations, advanced analytics, and goal tracking
+                  Get personalized recommendations, advanced analytics, and goal
+                  tracking
                 </p>
               </div>
             </div>
-            
+
             <button
               onClick={handleUpgradeClick}
               className="w-full px-3 py-2 bg-lime-400 hover:bg-lime-500 text-black text-xs font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 group"
@@ -63,8 +96,8 @@ function Sidebar({activeView, changeView}) {
           </div>
         </div>
       )}
-      
-      <UserDropDown />
+
+      {user && <UserDropDown name={user.name} email={user.email} />}
     </div>
   );
 }
