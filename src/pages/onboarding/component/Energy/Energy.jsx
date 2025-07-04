@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/Button";
 import "./Energy.css";
+import { toast } from "react-toastify";
 
 const Energy = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Energy = () => {
     if (isFormValid) {
       navigate("/transportation");
     } else {
-      alert("You should fill all details.");
+      toast.dismiss("You should fill all details.");
     }
   };
 

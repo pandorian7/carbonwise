@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { Button } from "@/components/ui/Button";
 import "./business.css";
+import { toast } from "react-toastify";
 
 const Business = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    businessName: "",
-    industryType: "",
+    name: "",
+    industry: "",
     employeeSize: "",
   });
 
@@ -17,11 +19,29 @@ const Business = () => {
     }));
   };
 
-  const handleContinue = () => {
-    navigate('/facilities');
-  };
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.industry.trim() !== "" &&
+    formData.employeeSize.trim() !== "";
 
- 
+  const handleContinue = () => {
+    if (!isFormValid) {
+      toast.error("You should fill all details.");
+      return;
+    }
+
+    // Save business info to localStorage for use on the facilities page
+    localStorage.setItem(
+      "businessInfo",
+      JSON.stringify({
+        name: formData.name,
+        industry: formData.industry,
+        employeeSize: formData.employeeSize,
+      })
+    );
+
+    navigate("/facilities");
+  };
 
   return (
     <div className="business-container">
@@ -30,13 +50,8 @@ const Business = () => {
         <div className="nav-content">
           <div className="logo-container">
             <div className="logo-icon">
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M14.0002 2.33334V25.6667M22.2497 5.75042L5.75058 22.2496M25.6668 14H2.3335M22.2497 22.2496L5.75058 5.75042"
                   stroke="#C1F17E"
@@ -49,21 +64,17 @@ const Business = () => {
             <span className="logo-text">CarbonWise</span>
           </div>
         </div>
-        
       </div>
 
       {/* Main Content */}
       <div className="business-content">
-        {/* Progress Bar */}
         <div className="progress-container">
           <div className="business-progress">
             <div className="progress-fill" style={{ width: "25%" }}></div>
           </div>
         </div>
 
-        {/* Form Container */}
         <div className="form-container">
-          {/* Header */}
           <div className="form-header">
             <h1 className="form-title">Tell us about your business</h1>
             <p className="form-subtitle">
@@ -72,30 +83,27 @@ const Business = () => {
             </p>
           </div>
 
-          {/* Form Fields */}
           <div className="form-section">
-            {/* Business Name */}
             <div className="field-group">
               <label className="field-label">Business name</label>
               <input
                 type="text"
                 placeholder="Enter your business name"
-                value={formData.businessName}
+                value={formData.name}
                 onChange={(e) =>
-                  handleInputChange("businessName", e.target.value)
+                  handleInputChange("name", e.target.value)
                 }
-                className="business-input"
+                className="business-input"  required
               />
             </div>
 
-            {/* Industry Type */}
             <div className="field-group">
               <label className="field-label">Industry type</label>
               <div className="select-container">
                 <select
-                  value={formData.industryType}
+                  value={formData.industry}
                   onChange={(e) =>
-                    handleInputChange("industryType", e.target.value)
+                    handleInputChange("industry", e.target.value)
                   }
                   className="business-select"
                 >
@@ -115,13 +123,8 @@ const Business = () => {
                   <option value="other">Other</option>
                 </select>
                 <div className="select-arrow">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg width="16" height="16" viewBox="0 0 16 16"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M4 6L8 10L12 6"
                       stroke="#696C72"
@@ -134,7 +137,6 @@ const Business = () => {
               </div>
             </div>
 
-            {/* Employee Size */}
             <div className="field-group">
               <label className="field-label">Number of employees</label>
               <div className="select-container">
@@ -156,13 +158,8 @@ const Business = () => {
                   <option value="1000+">1000+ employees</option>
                 </select>
                 <div className="select-arrow">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg width="16" height="16" viewBox="0 0 16 16"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M4 6L8 10L12 6"
                       stroke="#696C72"
@@ -176,12 +173,10 @@ const Business = () => {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="button-section">
-            <button onClick={handleContinue} className="continue-button">
+            <Button onClick={handleContinue} className="continue-button">
               Continue
-            </button>
-            
+            </Button>
           </div>
         </div>
       </div>

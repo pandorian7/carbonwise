@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import axios from 'axios'; // Make sure axios is imported
+import { Button } from '@/components/ui/Button';
 import './facilities.css';
+import { toast } from 'react-toastify';
 
 const Facilities = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    primaryLocation: '',
-    locationSize: '',
+    location: '',
+    country: '',
     additionalLocations: '',
     ownershipType: '',
-    buildingType: 'office'
+    buildingType: ''
   });
 
   const handleInputChange = (field, value) => {
@@ -19,8 +22,50 @@ const Facilities = () => {
     }));
   };
 
-  const handleContinue = () => {
-    navigate('/energy');  // Navigate to energy page
+  const isFormValid =
+    formData.location.trim() !== "" &&
+    formData.country.trim() !== "" &&
+    formData.additionalLocations.trim() !== "" &&
+    formData.ownershipType.trim() !== "" &&
+    formData.buildingType.trim() !== "";
+
+  const handleContinue = async () => {
+    if (!isFormValid) {
+      alert("You should fill all details.");
+      return;
+    }
+     
+    // Get data from localStorage
+    const businessInfo = JSON.parse(localStorage.getItem('businessInfo') || '{}');
+
+    try {
+      const res = await axios.post("https://carbonwise-backend-1.onrender.com/businesses/addBusiness", {
+        name: businessInfo.name,
+        industry: businessInfo.industry,
+        location: formData.location,
+        country: formData.country,
+        additionalLocations: formData.additionalLocations,
+        ownershipType: formData.ownershipType,
+        buildingType: formData.buildingType
+      });
+
+   localStorage.setItem(
+      "facilitiesInfo",
+      JSON.stringify(res.data)
+    );
+
+
+      toast.success("Facilities data saved successfully!");
+      navigate("/energy");
+    } catch (error) {
+      const errorMsg =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        JSON.stringify(error.response?.data) ||
+        error.message;
+
+      toast.error("Error saving facility data: " + errorMsg);
+    }
   };
 
 
@@ -75,8 +120,8 @@ const Facilities = () => {
               <input
                 type="text"
                 placeholder="Location"
-                value={formData.primaryLocation}
-                onChange={(e) => handleInputChange('primaryLocation', e.target.value)}
+                value={formData.location}
+                onChange={(e) => handleInputChange('location', e.target.value)} required
                 className="facilities-input"
               />
             </div>
@@ -90,7 +135,7 @@ const Facilities = () => {
                 type="number"
                 placeholder="Label"
                 value={formData.additionalLocations}
-                onChange={(e) => handleInputChange('additionalLocations', e.target.value)}
+                onChange={(e) => handleInputChange('additionalLocations', e.target.value)} required
                 className="facilities-input"
               />
             </div>
@@ -100,10 +145,10 @@ const Facilities = () => {
               <label className="field-label">Country</label>
               <div className="select-container">
                 <select
-                  value={formData.buildingType}
-                  onChange={(e) => handleInputChange('buildingType', e.target.value)}
+                  value={formData.country}
+                  onChange={(e) => handleInputChange('country', e.target.value)} required
                   className="facilities-select"
-                >
+                > <option value="" disabled>Select your country</option>
                   <option value="australia">Australia</option>
                   <option value="austria">Austria</option>
                   <option value="bangladesh">Bangladesh</option>
@@ -187,7 +232,7 @@ const Facilities = () => {
                     name="ownershipType"
                     value="own"
                     checked={formData.ownershipType === 'own'}
-                    onChange={(e) => handleInputChange('ownershipType', e.target.value)}
+                    onChange={(e) => handleInputChange('ownershipType', e.target.value)} required
                     className="radio-input"
                   />
                   <label htmlFor="own" className="radio-label">Own</label>
@@ -199,7 +244,7 @@ const Facilities = () => {
                     name="ownershipType"
                     value="rent"
                     checked={formData.ownershipType === 'rent'}
-                    onChange={(e) => handleInputChange('ownershipType', e.target.value)}
+                    onChange={(e) => handleInputChange('ownershipType', e.target.value)} required
                     className="radio-input"
                   />
                   <label htmlFor="rent" className="radio-label">Rent</label>
@@ -213,9 +258,9 @@ const Facilities = () => {
               <div className="select-container">
                 <select
                   value={formData.buildingType}
-                  onChange={(e) => handleInputChange('buildingType', e.target.value)}
+                  onChange={(e) => handleInputChange('buildingType', e.target.value)} required
                   className="facilities-select"
-                >
+                > <option value="" disabled>Select building type</option>
                   <option value="office">Office</option>
                   <option value="warehouse">Warehouse</option>
                   <option value="retail">Retail</option>
@@ -237,12 +282,12 @@ const Facilities = () => {
 
           {/* Buttons */}
           <div className="button-section">
-            <button
-              onClick={handleContinue}
-              className="continue-button"
-            >
-              Continue
-            </button>
+                     <Button
+  onClick={handleContinue}
+  className="continue-button"
+>
+  Continue
+</Button>
 
           </div>
         </div>
