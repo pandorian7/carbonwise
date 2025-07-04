@@ -7,7 +7,7 @@ export function saveEmissionDataCategoriesToLocalStorage() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await api.emissionEntries.get();
+                const response = await api.allEmissionEnties.get();
                 const data = Array.isArray(response) && response.length > 0 ? response : [];
                 setUserEmissionData(data);
                 storeMonthData(data);
@@ -108,51 +108,85 @@ export function saveEmissionDataCategoriesToLocalStorage() {
 }
 
 
+export function saveUserEmissionDataToLocalStorage() {
+
+    const [currentUserEmissionData, setCurrentUserEmissionData] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await api.emissionEntries.get();
+                const data = Array.isArray(response) && response.length > 0 ? response : [];
+                setCurrentUserEmissionData(data);
+                storeTotalEmission(data);
+            } catch (error) {
+                console.error("Error fetching emissions data:", error);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const storeTotalEmission = (data) => {
+    if (!Array.isArray(data)) return;
+
+    const totalEmission = data.reduce((sum, entry) => {
+        if (!entry.date || typeof entry.co2Emission !== 'number') return sum;
+        return sum + entry.co2Emission;
+    }, 0);
+
+    const roundedTotal = parseFloat(totalEmission.toFixed(2));
+
+    localStorage.setItem("currentUserTotalEmissions", JSON.stringify(roundedTotal));
+    console.log("Total CO2 Emissions saved to local storage:", roundedTotal);
+};
+}
+
+
 export function saveDashboardRecommendationSummery() {
-  const [recommendations, setRecommendations] = useState([]);
+    const [recommendations, setRecommendations] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await api.recommendations.get();
-        const data = Array.isArray(response) && response.length > 0 ? response : [];
-        setRecommendations(data);
-        processTopCategoryRecommendations(data);
-      } catch (error) {
-        console.error("Error fetching recommendations:", error);
-      }
-    }
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await api.recommendations.get();
+                const data = Array.isArray(response) && response.length > 0 ? response : [];
+                setRecommendations(data);
+                processTopCategoryRecommendations(data);
+            } catch (error) {
+                console.error("Error fetching recommendations:", error);
+            }
+        }
 
-    fetchData();
-  }, []);
+        fetchData();
+    }, []);
 
-  const processTopCategoryRecommendations = (allRecommendations) => {
-    const rawData = localStorage.getItem("categoryEmissions");
-    if (!rawData) return;
+    const processTopCategoryRecommendations = (allRecommendations) => {
+        const rawData = localStorage.getItem("categoryEmissions");
+        if (!rawData) return;
 
-    const categoryEmissions = JSON.parse(rawData);
+        const categoryEmissions = JSON.parse(rawData);
 
-    const topTwoCategories = categoryEmissions
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 1)
-      .map(item => item.name);
+        const topTwoCategories = categoryEmissions
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 1)
+            .map(item => item.name);
 
-    const selectedTitles = [];
+        const selectedTitles = [];
 
-    topTwoCategories.forEach(categoryName => {
-      const filtered = allRecommendations.filter(rec =>
-        rec.emissionEntry?.type === categoryName
-      );
+        topTwoCategories.forEach(categoryName => {
+            const filtered = allRecommendations.filter(rec =>
+                rec.emissionEntry?.type === categoryName
+            );
 
-      const shuffled = filtered.sort(() => 0.5 - Math.random());
-      const titles = shuffled.slice(0, 4).map(rec => rec.title);
-      selectedTitles.push(...titles);
-    });
+            const shuffled = filtered.sort(() => 0.5 - Math.random());
+            const titles = shuffled.slice(0, 4).map(rec => rec.title);
+            selectedTitles.push(...titles);
+        });
 
-    localStorage.setItem("dashboardRecommendations", JSON.stringify(selectedTitles));
-    console.log("Saved dashboard recommendation titles:", selectedTitles);
-  };
+        localStorage.setItem("dashboardRecommendations", JSON.stringify(selectedTitles));
+        console.log("Saved dashboard recommendation titles:", selectedTitles);
+    };
 
-  return null;
+    return null;
 }
 

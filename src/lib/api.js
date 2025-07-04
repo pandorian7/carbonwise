@@ -48,7 +48,10 @@ async function getRecommendations() {
   return res.data;
 }
 
-
+async function getAllEmissonEntries () {
+  const res = await apiClient.get("emission_entries/getAllEmissionEntries");
+  return res.data;
+}
 
 
 export default {
@@ -60,4 +63,7 @@ export default {
 
   recommendations: {get: getRecommendations},
 
+  allEmissionEnties: {
+    get: getAllEmissonEntries,
+  },
 };
