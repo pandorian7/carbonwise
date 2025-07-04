@@ -106,8 +106,8 @@ function Reports(){
           <h3 className="text-lg font-medium mb-4">Current Footprint Breakdown:</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="flex justify-center">
-            <div className="relative w-[300px] h-[300px]">
-                <canvas ref={chartRef} width="300" height="300"></canvas>
+            <div className="relative w-[400px] h-[400px]">
+                <canvas ref={chartRef} width="400" height="400"></canvas>
               </div>
             </div>
             <div className="flex flex-col justify-center">
