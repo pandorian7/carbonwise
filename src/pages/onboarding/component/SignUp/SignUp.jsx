@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import "./SignUp.css";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const SignUp = () => {
        // Assuming you have an ownership type in facilitiesInfo
       });
       
-      alert("Registered successfully!");
+      toast.error("Registered successfully!");
       navigate("/dashboard");
     } catch (error) {
       const errorMessage =
@@ -51,7 +52,7 @@ const SignUp = () => {
         error.response?.data ||
         error.message;
 
-      alert("Error: " + errorMessage);
+      toast.error("Error: " + errorMessage);
     }
   };
 

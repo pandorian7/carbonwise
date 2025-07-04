@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import "./LoginPage.css";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Login = () => {
 });
 
  console.log(response.data);
-      alert("Login successful!");
+      toast.success("Login successful!");
       // Optionally store token here: localStorage.setItem('token', response.data.token)
       navigate('/dashboard');
     } catch (error) {
@@ -36,7 +37,7 @@ const Login = () => {
         error.response?.data?.message ||
         error.response?.data ||
         error.message;
-      alert("Login failed: " + errorMessage);
+      toast.error("Login failed: " + errorMessage);
     }
   };
 

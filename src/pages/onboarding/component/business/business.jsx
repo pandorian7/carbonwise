@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/Button";
 import "./business.css";
+import { toast } from "react-toastify";
 
 const Business = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Business = () => {
 
   const handleContinue = () => {
     if (!isFormValid) {
-      alert("You should fill all details.");
+      toast.error("You should fill all details.");
       return;
     }
 
@@ -92,7 +93,7 @@ const Business = () => {
                 onChange={(e) =>
                   handleInputChange("name", e.target.value)
                 }
-                className="business-input"
+                className="business-input"  required
               />
             </div>
 
