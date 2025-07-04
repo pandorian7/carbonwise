@@ -1,14 +1,26 @@
 import { createContext, useContext } from "react";
 import useLocalStorageState from "use-local-storage-state";
+import { jwtDecode } from "jwt-decode";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext({token: null});
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useLocalStorageState("token", {defaultValue: null});
+  const [token, setToken] = useLocalStorageState("token", {
+    defaultValue: null,
+  });
 
-  const user = token ? {id: token.id, email: token.email}: null;
+  let user, business;
+  try {
+    const data = jwtDecode(token);
 
-  const business = token ? {id: token.business.id, name: token.business.name}: null
+    const { email, name, business: businessName } = data;
+
+    user = { email, name };
+    business = { name: businessName };
+  } catch {
+    user = null;
+    business = null;
+  }
   return (
     <AuthContext.Provider value={{ token, setToken, user, business }}>
       {children}

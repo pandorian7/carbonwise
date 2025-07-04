@@ -15,7 +15,7 @@ import Logo from "./Logo";
 import { getAuth } from "@/contexts/auth-context";
 
 function Sidebar({ activeView, changeView }) {
-  const { user, business} = getAuth();
+  const { user } = getAuth();
 
   const navigate = useNavigate();
 
@@ -97,7 +97,7 @@ function Sidebar({ activeView, changeView }) {
         </div>
       )}
 
-      <UserDropDown name={business.name} email={user.email}/>
+      <UserDropDown name={user.name} email={user.email} />
     </div>
   );
 }
