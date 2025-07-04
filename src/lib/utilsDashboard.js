@@ -1,5 +1,14 @@
 import api from '@/lib/api';
 
+const dataCache = {
+  monthlyEmissions: null,
+  categoryEmissions: null,
+  totalEmissions: 0,
+  currentUserTotalEmissions: 0,
+  dashboardRecommendations: null,
+  lastUpdated: null
+};
+
 const getFromStorage = (key, fallback = null) => {
   try {
     const item = localStorage.getItem(key);
@@ -10,7 +19,6 @@ const getFromStorage = (key, fallback = null) => {
   }
 };
 
-// Helper function to save data to localStorage
 const saveToStorage = (key, data) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
@@ -19,16 +27,113 @@ const saveToStorage = (key, data) => {
   }
 };
 
+const processEmissionData = (data) => {
+  const monthMap = {
+    0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'Apr', 4: 'May', 5: 'Jun',
+    6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Oct', 10: 'Nov', 11: 'Dec'
+  };
+
+  const categoryMap = {
+    Energy: { types: ["Energy"], color: "#2563eb" },
+    Transport: { types: ["Transport"], color: "#ef4444" },
+    Waste: { types: ["Waste"], color: "#f59e0b" },
+    Water: { types: ["Water"], color: "#8b5cf6" },
+    Material: { types: ["Material"], color: "#10b981" },
+    Others: { types: [], color: "#374151" }
+  };
+
+  // Initialize aggregation objects
+  const monthlyEmissions = {};
+  const categoryEmissions = {
+    Energy: 0,
+    Transport: 0,
+    Waste: 0,
+    Water: 0,
+    Material: 0,
+    Others: 0
+  };
+
+  let totalEmission = 0;
+
+  // Single pass through data to aggregate both monthly and category data
+  data.forEach(entry => {
+    if (!entry.co2Emission || typeof entry.co2Emission !== 'number') return;
+    
+    const emission = entry.co2Emission;
+    totalEmission += emission;
+
+    // Process monthly data
+    if (entry.date) {
+      const dateObj = new Date(entry.date);
+      const monthIndex = dateObj.getMonth();
+      const month = monthMap[monthIndex];
+      if (!monthlyEmissions[month]) {
+        monthlyEmissions[month] = 0;
+      }
+      monthlyEmissions[month] += emission;
+    }
+
+    // Process category data
+    if (entry.type) {
+      let matched = false;
+      for (const [categoryName, { types }] of Object.entries(categoryMap)) {
+        if (types.includes(entry.type)) {
+          categoryEmissions[categoryName] += emission;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched) {
+        categoryEmissions.Others += emission;
+      }
+    }
+  });
+
+  // Format monthly data
+  const orderedMonths = Object.values(monthMap);
+  const monthEmissionArray = orderedMonths
+    .filter(month => monthlyEmissions[month])
+    .map(month => ({
+      month,
+      value: parseFloat(monthlyEmissions[month].toFixed(2))
+    }));
+
+  // Format category data
+  const categoryDataArray = Object.entries(categoryEmissions).map(
+    ([name, value]) => ({
+      name,
+      value: parseFloat(value.toFixed(2)),
+      color: categoryMap[name].color
+    })
+  );
+
+  return {
+    monthlyEmissions: monthEmissionArray,
+    categoryEmissions: categoryDataArray,
+    totalEmissions: parseFloat(totalEmission.toFixed(2))
+  };
+};
+
 export async function fetchAndStoreEmissionData() {
   try {
     const response = await api.allEmissionEnties.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
     
-    // Store month data
-    storeMonthData(data);
-    // Store category data
-    storeCategoryData(data);
+    // Process data once for both monthly and category summaries
+    const processedData = processEmissionData(data);
     
+    // Update cache
+    dataCache.monthlyEmissions = processedData.monthlyEmissions;
+    dataCache.categoryEmissions = processedData.categoryEmissions;
+    dataCache.totalEmissions = processedData.totalEmissions;
+    dataCache.lastUpdated = Date.now();
+    
+    // Save to localStorage for persistence
+    saveToStorage("monthlyEmissions", processedData.monthlyEmissions);
+    saveToStorage("categoryEmissions", processedData.categoryEmissions);
+    saveToStorage("totalEmissions", processedData.totalEmissions);
+    
+    console.log("Emission data processed and cached:", processedData);
     return data;
   } catch (error) {
     console.error("Error fetching emissions data:", error);
@@ -42,14 +147,25 @@ export async function fetchAndStoreUserEmissionData() {
     const response = await api.emissionEntries.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
     
-    const totalEmission = storeTotalEmission(data);
-    saveToStorage("currentUserTotalEmissions", totalEmission);
+    const totalEmission = data.reduce((sum, entry) => {
+      if (!entry.date || typeof entry.co2Emission !== 'number') return sum;
+      return sum + entry.co2Emission;
+    }, 0);
+
+    const userTotal = parseFloat(totalEmission.toFixed(2));
     
-    return totalEmission;
+    // Update cache
+    dataCache.currentUserTotalEmissions = userTotal;
+    
+    // Save to localStorage
+    saveToStorage("currentUserTotalEmissions", userTotal);
+    
+    return userTotal;
   } catch (error) {
     console.error("Error fetching user emissions data:", error);
     // Return fallback data if fetch fails
     const fallbackTotal = 0;
+    dataCache.currentUserTotalEmissions = fallbackTotal;
     saveToStorage("currentUserTotalEmissions", fallbackTotal);
     return fallbackTotal;
   }
@@ -71,6 +187,7 @@ export async function fetchAndStoreRecommendations() {
       "Optimize your transportation routes",
       "Reduce paper usage and go digital"
     ];
+    dataCache.dashboardRecommendations = fallbackRecommendations;
     saveToStorage("dashboardRecommendations", fallbackRecommendations);
     return fallbackRecommendations;
   }
@@ -89,106 +206,11 @@ export function saveDashboardRecommendationSummery() {
   return fetchAndStoreRecommendations();
 }
 
-const storeMonthData = (data) => {
-  const monthMap = {
-    0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'Apr', 4: 'May', 5: 'Jun',
-    6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Oct', 10: 'Nov', 11: 'Dec'
-  };
-
-  const monthlyEmissions = {};
-
-  data.forEach(entry => {
-    if (!entry.date || !entry.co2Emission) return;
-    const dateObj = new Date(entry.date);
-    const monthIndex = dateObj.getMonth();
-    const month = monthMap[monthIndex];
-    if (!monthlyEmissions[month]) {
-      monthlyEmissions[month] = 0;
-    }
-    monthlyEmissions[month] += entry.co2Emission;
-  });
-
-  const orderedMonths = Object.values(monthMap);
-
-  const monthEmissionArray = orderedMonths
-    .filter(month => monthlyEmissions[month])
-    .map(month => ({
-      month,
-      value: parseFloat(monthlyEmissions[month].toFixed(2))
-    }));
-
-  const totalEmission = monthEmissionArray.reduce((sum, item) => sum + item.value, 0);
-  saveToStorage("totalEmissions", parseFloat(totalEmission.toFixed(2)));
-  saveToStorage("monthlyEmissions", monthEmissionArray);
-  
-  console.log("Monthly CO2 Emissions saved to local storage:", monthEmissionArray);
-};
-
-// Helper function to store category data
-const storeCategoryData = (data) => {
-  const categoryMap = {
-    Energy: { types: ["Energy"], color: "#2563eb" },
-    Transport: { types: ["Transport"], color: "#ef4444" },
-    Waste: { types: ["Waste"], color: "#f59e0b" },
-    Water: { types: ["Water"], color: "#8b5cf6" },
-    Material: { types: ["Material"], color: "#10b981" },
-    Others: { types: [], color: "#374151" }
-  };
-
-  const categoryEmissions = {
-    Energy: 0,
-    Transport: 0,
-    Waste: 0,
-    Water: 0,
-    Material: 0,
-    Others: 0
-  };
-
-  data.forEach(entry => {
-    if (!entry.co2Emission || !entry.type) return;
-
-    let matched = false;
-    for (const [categoryName, { types }] of Object.entries(categoryMap)) {
-      if (types.includes(entry.type)) {
-        categoryEmissions[categoryName] += entry.co2Emission;
-        matched = true;
-        break;
-      }
-    }
-
-    if (!matched) {
-      categoryEmissions.Others += entry.co2Emission;
-    }
-  });
-
-  const categoryDataArray = Object.entries(categoryEmissions).map(
-    ([name, value]) => ({
-      name,
-      value: parseFloat(value.toFixed(2)),
-      color: categoryMap[name].color
-    })
-  );
-
-  saveToStorage("categoryEmissions", categoryDataArray);
-  console.log("Category-wise CO2 Emissions saved:", categoryDataArray);
-};
-
-// Helper function to store total emission
-const storeTotalEmission = (data) => {
-  if (!Array.isArray(data)) return 0;
-
-  const totalEmission = data.reduce((sum, entry) => {
-    if (!entry.date || typeof entry.co2Emission !== 'number') return sum;
-    return sum + entry.co2Emission;
-  }, 0);
-
-  return parseFloat(totalEmission.toFixed(2));
-};
-
 // Helper function to process recommendations
 const processTopCategoryRecommendations = (allRecommendations) => {
-  const rawData = localStorage.getItem("categoryEmissions");
-  if (!rawData) {
+  const categoryEmissions = dataCache.categoryEmissions || getFromStorage("categoryEmissions", []);
+  
+  if (!categoryEmissions || categoryEmissions.length === 0) {
     // If no category data, use fallback recommendations
     const fallbackRecommendations = [
       "Consider switching to renewable energy sources",
@@ -196,11 +218,10 @@ const processTopCategoryRecommendations = (allRecommendations) => {
       "Optimize your transportation routes",
       "Reduce paper usage and go digital"
     ];
+    dataCache.dashboardRecommendations = fallbackRecommendations;
     saveToStorage("dashboardRecommendations", fallbackRecommendations);
     return;
   }
-
-  const categoryEmissions = JSON.parse(rawData);
 
   const topTwoCategories = categoryEmissions
     .sort((a, b) => b.value - a.value)
@@ -229,6 +250,7 @@ const processTopCategoryRecommendations = (allRecommendations) => {
     );
   }
 
+  dataCache.dashboardRecommendations = selectedTitles;
   saveToStorage("dashboardRecommendations", selectedTitles);
   console.log("Saved dashboard recommendation titles:", selectedTitles);
 };
@@ -246,9 +268,21 @@ const getFallbackEmissionData = () => {
   
   const fallbackTotal = fallbackMonthlyData.reduce((sum, item) => sum + item.value, 0);
   
+  dataCache.monthlyEmissions = fallbackMonthlyData;
+  dataCache.totalEmissions = fallbackTotal;
+  
   saveToStorage("monthlyEmissions", fallbackMonthlyData);
   saveToStorage("totalEmissions", fallbackTotal);
   
   return fallbackMonthlyData;
+};
+
+export const getCachedData = () => dataCache;
+
+export const clearCache = () => {
+  Object.keys(dataCache).forEach(key => {
+    dataCache[key] = null;
+  });
+  dataCache.lastUpdated = null;
 };
 

@@ -9,7 +9,8 @@ import EmissionsChart from "@/components/chart/piChart";
 import { 
   fetchAndStoreEmissionData, 
   fetchAndStoreUserEmissionData, 
-  fetchAndStoreRecommendations 
+  fetchAndStoreRecommendations,
+  getCachedData
 } from '@/lib/utilsDashboard';
 
 function Dashboard({ changeView }) {
@@ -33,19 +34,31 @@ function Dashboard({ changeView }) {
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
-      // Load data from localStorage first (for faster initial render)
-      const storedMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
-      const storedTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
-      const storedCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
-      const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
+      // First, try to get data from cache for instant loading
+      const cachedData = getCachedData();
+      
+      if (cachedData.lastUpdated) {
+        // Use cached data if available
+        setMonthlyEmissions(cachedData.monthlyEmissions || []);
+        setTotal(cachedData.totalEmissions || 0);
+        setCurrentEmissions(cachedData.currentUserTotalEmissions || 0);
+        setRecommendations(cachedData.dashboardRecommendations || []);
+        setIsLoading(false);
+      } else {
+        // Fallback to localStorage if cache is empty
+        const storedMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
+        const storedTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
+        const storedCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
+        const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
 
-      // Set initial data from localStorage
-      setMonthlyEmissions(storedMonthlyEmissions);
-      setTotal(storedTotal);
-      setCurrentEmissions(storedCurrentEmissions);
-      setRecommendations(storedRecommendations);
+        setMonthlyEmissions(storedMonthlyEmissions);
+        setTotal(storedTotal);
+        setCurrentEmissions(storedCurrentEmissions);
+        setRecommendations(storedRecommendations);
+        setIsLoading(false);
+      }
 
-      // Fetch fresh data in background
+      // Fetch fresh data in background and update cache
       const [emissionData, userEmissionData, recommendationsData] = await Promise.allSettled([
         fetchAndStoreEmissionData(),
         fetchAndStoreUserEmissionData(),
@@ -54,25 +67,23 @@ function Dashboard({ changeView }) {
 
       // Update state with fresh data if successful
       if (emissionData.status === 'fulfilled') {
-        const freshMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
-        const freshTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
-        setMonthlyEmissions(freshMonthlyEmissions);
-        setTotal(freshTotal);
+        const freshCachedData = getCachedData();
+        setMonthlyEmissions(freshCachedData.monthlyEmissions || []);
+        setTotal(freshCachedData.totalEmissions || 0);
       }
 
       if (userEmissionData.status === 'fulfilled') {
-        const freshCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
-        setCurrentEmissions(freshCurrentEmissions);
+        const freshCachedData = getCachedData();
+        setCurrentEmissions(freshCachedData.currentUserTotalEmissions || 0);
       }
 
       if (recommendationsData.status === 'fulfilled') {
-        const freshRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
-        setRecommendations(freshRecommendations);
+        const freshCachedData = getCachedData();
+        setRecommendations(freshCachedData.dashboardRecommendations || []);
       }
 
     } catch (error) {
       console.error("Error loading dashboard data:", error);
-    } finally {
       setIsLoading(false);
     }
   };

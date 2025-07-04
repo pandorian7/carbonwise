@@ -1,9 +1,20 @@
 import React from "react";
 import { Pie, PieChart, Cell } from "recharts";
+import { getCachedData } from '@/lib/utilsDashboard';
 
 export default function EmissionsChart() {
-  const rawData = localStorage.getItem("categoryEmissions");
-  const chartData = rawData ? JSON.parse(rawData) : [];
+  // Try to get data from cache first, then fallback to localStorage
+  const cachedData = getCachedData();
+  const chartData = cachedData.categoryEmissions || 
+    (() => {
+      try {
+        const rawData = localStorage.getItem("categoryEmissions");
+        return rawData ? JSON.parse(rawData) : [];
+      } catch (error) {
+        console.error("Error reading category emissions from localStorage:", error);
+        return [];
+      }
+    })();
 
   const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
 
