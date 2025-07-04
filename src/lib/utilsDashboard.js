@@ -180,16 +180,9 @@ export async function fetchAndStoreRecommendations() {
     return data;
   } catch (error) {
     console.error("Error fetching recommendations:", error);
-    // Return fallback recommendations if fetch fails
-    const fallbackRecommendations = [
-      "Consider switching to renewable energy sources",
-      "Implement energy-efficient lighting systems",
-      "Optimize your transportation routes",
-      "Reduce paper usage and go digital"
-    ];
-    dataCache.dashboardRecommendations = fallbackRecommendations;
-    saveToStorage("dashboardRecommendations", fallbackRecommendations);
-    return fallbackRecommendations;
+    // Return null to trigger loading state instead of fallback recommendations
+    dataCache.dashboardRecommendations = null;
+    return null;
   }
 }
 
@@ -206,56 +199,32 @@ export function saveDashboardRecommendationSummery() {
   return fetchAndStoreRecommendations();
 }
 
-// Helper function to process recommendations
+
 const processTopCategoryRecommendations = (allRecommendations) => {
   const categoryEmissions = dataCache.categoryEmissions || getFromStorage("categoryEmissions", []);
   
   if (!categoryEmissions || categoryEmissions.length === 0) {
-    // If no category data, use fallback recommendations
-    const fallbackRecommendations = [
-      "Consider switching to renewable energy sources",
-      "Implement energy-efficient lighting systems",
-      "Optimize your transportation routes",
-      "Reduce paper usage and go digital"
-    ];
-    dataCache.dashboardRecommendations = fallbackRecommendations;
-    saveToStorage("dashboardRecommendations", fallbackRecommendations);
+    // If no category data, return null to trigger loading state
+    dataCache.dashboardRecommendations = null;
     return;
   }
 
-  const topTwoCategories = categoryEmissions
-    .sort((a, b) => b.value - a.value)
-    .slice(0, 1)
-    .map(item => item.name);
+  // Simply take the last 4 recommendations instead of complex filtering
+  const lastFourRecommendations = allRecommendations
+    .slice(-4)
+    .map(rec => rec.title || rec);
 
-  const selectedTitles = [];
-
-  topTwoCategories.forEach(categoryName => {
-    const filtered = allRecommendations.filter(rec =>
-      rec.emissionEntry?.type === categoryName
-    );
-
-    const shuffled = filtered.sort(() => 0.5 - Math.random());
-    const titles = shuffled.slice(0, 4).map(rec => rec.title);
-    selectedTitles.push(...titles);
-  });
-
-  // If no recommendations found, use fallback
-  if (selectedTitles.length === 0) {
-    selectedTitles.push(
-      "Consider switching to renewable energy sources",
-      "Implement energy-efficient lighting systems",
-      "Optimize your transportation routes",
-      "Reduce paper usage and go digital"
-    );
+  // If we have recommendations, use them; otherwise return null for loading state
+  if (lastFourRecommendations.length > 0) {
+    dataCache.dashboardRecommendations = lastFourRecommendations;
+    saveToStorage("dashboardRecommendations", lastFourRecommendations);
+    console.log("Saved last 4 recommendations:", lastFourRecommendations);
+  } else {
+    dataCache.dashboardRecommendations = null;
   }
-
-  dataCache.dashboardRecommendations = selectedTitles;
-  saveToStorage("dashboardRecommendations", selectedTitles);
-  console.log("Saved dashboard recommendation titles:", selectedTitles);
 };
 
-// Fallback data functions
+
 const getFallbackEmissionData = () => {
   const fallbackMonthlyData = [
     { month: 'Jan', value: 150.5 },

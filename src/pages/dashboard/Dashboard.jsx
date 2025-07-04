@@ -6,6 +6,7 @@ import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
+import { MoonLoader } from "react-spinners";
 import { 
   fetchAndStoreEmissionData, 
   fetchAndStoreUserEmissionData, 
@@ -19,14 +20,13 @@ function Dashboard({ changeView }) {
   const [selectedPeriod, setSelectedPeriod] = useState('Daily');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
-  // Data states
   const [monthlyEmissions, setMonthlyEmissions] = useState([]);
   const [total, setTotal] = useState(0);
   const [currentEmissions, setCurrentEmissions] = useState(0);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load data on component mount
+ 
   useEffect(() => {
     loadDashboardData();
   }, []);
@@ -34,22 +34,20 @@ function Dashboard({ changeView }) {
   const loadDashboardData = async () => {
     setIsLoading(true);
     try {
-      // First, try to get data from cache for instant loading
       const cachedData = getCachedData();
       
       if (cachedData.lastUpdated) {
-        // Use cached data if available
         setMonthlyEmissions(cachedData.monthlyEmissions || []);
         setTotal(cachedData.totalEmissions || 0);
         setCurrentEmissions(cachedData.currentUserTotalEmissions || 0);
-        setRecommendations(cachedData.dashboardRecommendations || []);
+        setRecommendations(cachedData.dashboardRecommendations);
         setIsLoading(false);
       } else {
         // Fallback to localStorage if cache is empty
         const storedMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
         const storedTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
         const storedCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
-        const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
+        const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "null");
 
         setMonthlyEmissions(storedMonthlyEmissions);
         setTotal(storedTotal);
@@ -79,7 +77,7 @@ function Dashboard({ changeView }) {
 
       if (recommendationsData.status === 'fulfilled') {
         const freshCachedData = getCachedData();
-        setRecommendations(freshCachedData.dashboardRecommendations || []);
+        setRecommendations(freshCachedData.dashboardRecommendations);
       }
 
     } catch (error) {
@@ -146,7 +144,7 @@ function Dashboard({ changeView }) {
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
   {/*Emmision per employee*/ }
-  const benchmarkEmissions = 100000000;
+  const benchmarkEmissions = 10000000;
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
   const navigate = useNavigate()
@@ -339,22 +337,31 @@ function Dashboard({ changeView }) {
             <Button variant='secondaryOutlined' onClick={goToRecommedationTab}>See All</Button>
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-2">
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              {recommendations.map((rec, idx) => (
-                <div
-                  key={idx}
-                  className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2"
-                >
-                  <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">
-                    {rec}
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
+            {recommendations && recommendations.length > 0 ? (
+              <>
+                <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                  {recommendations.map((rec, idx) => (
+                    <div
+                      key={idx}
+                      className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2"
+                    >
+                      <div className="flex-1 justify-start text-base-card-foreground text-sm font-medium font-['Inter'] leading-none">
+                        {rec}
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-base-muted-foreground" />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="self-stretch flex flex-col justify-center items-start gap-2">
-              <div className="self-stretch justify-start text-base-muted-foreground text-sm font-normal font-['Inter'] leading-none">*Based on your recent data</div>
-            </div>
+                <div className="self-stretch flex flex-col justify-center items-start gap-2">
+                  <div className="self-stretch justify-start text-base-muted-foreground text-sm font-normal font-['Inter'] leading-none">*Based on your recent data</div>
+                </div>
+              </>
+            ) : (
+              <div className="flex w-full h-full justify-center items-center font-['Plus_Jakarta_Sans']">
+                <MoonLoader color="var(--color-lime-400)" size={50} />
+                <span className="text-5xl ml-3">Loading</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
