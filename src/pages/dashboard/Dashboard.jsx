@@ -6,13 +6,76 @@ import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
-import { saveEmissionDataCategoriesToLocalStorage, saveDashboardRecommendationSummery, saveUserEmissionDataToLocalStorage } from '@/lib/utilsDashboard';
+import { 
+  fetchAndStoreEmissionData, 
+  fetchAndStoreUserEmissionData, 
+  fetchAndStoreRecommendations 
+} from '@/lib/utilsDashboard';
 
 function Dashboard({ changeView }) {
 
   const [totalEmmision, setTotalEmmision] = useState(15.11);
   const [selectedPeriod, setSelectedPeriod] = useState('Daily');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
+  // Data states
+  const [monthlyEmissions, setMonthlyEmissions] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [currentEmissions, setCurrentEmissions] = useState(0);
+  const [recommendations, setRecommendations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load data on component mount
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    setIsLoading(true);
+    try {
+      // Load data from localStorage first (for faster initial render)
+      const storedMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
+      const storedTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
+      const storedCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
+      const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
+
+      // Set initial data from localStorage
+      setMonthlyEmissions(storedMonthlyEmissions);
+      setTotal(storedTotal);
+      setCurrentEmissions(storedCurrentEmissions);
+      setRecommendations(storedRecommendations);
+
+      // Fetch fresh data in background
+      const [emissionData, userEmissionData, recommendationsData] = await Promise.allSettled([
+        fetchAndStoreEmissionData(),
+        fetchAndStoreUserEmissionData(),
+        fetchAndStoreRecommendations()
+      ]);
+
+      // Update state with fresh data if successful
+      if (emissionData.status === 'fulfilled') {
+        const freshMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
+        const freshTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
+        setMonthlyEmissions(freshMonthlyEmissions);
+        setTotal(freshTotal);
+      }
+
+      if (userEmissionData.status === 'fulfilled') {
+        const freshCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
+        setCurrentEmissions(freshCurrentEmissions);
+      }
+
+      if (recommendationsData.status === 'fulfilled') {
+        const freshRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "[]");
+        setRecommendations(freshRecommendations);
+      }
+
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Function to format date based on selected period
   const getFormattedDate = () => {
@@ -41,15 +104,18 @@ function Dashboard({ changeView }) {
     }
   };
 
+  // Function to handle period selection
   const handlePeriodSelect = (period) => {
     setSelectedPeriod(period);
     setIsDropdownOpen(false);
   };
 
+  // Function to toggle dropdown
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isDropdownOpen && !event.target.closest('.dropdown-container')) {
@@ -68,15 +134,7 @@ function Dashboard({ changeView }) {
   const totalGoalForProgress = 2500;
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
-  saveEmissionDataCategoriesToLocalStorage()
-  const monthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions"));
-  const total = JSON.parse(localStorage.getItem("totalEmissions"));
-
-  saveDashboardRecommendationSummery();
-  const RECOMMENDATIONS = JSON.parse(localStorage.getItem("dashboardRecommendations"));
-
-  saveUserEmissionDataToLocalStorage();
-  const currentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions"));
+  {/*Emmision per employee*/ }
   const benchmarkEmissions = 100000000;
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
@@ -92,6 +150,15 @@ function Dashboard({ changeView }) {
 
   const goToCarbonCalculator = () => {
     changeView(2)();
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-base-muted-foreground">Loading dashboard data...</div>
+      </div>
+    );
   }
 
   return (
@@ -262,7 +329,7 @@ function Dashboard({ changeView }) {
           </div>
           <div className="self-stretch flex flex-col justify-start items-start gap-2">
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              {RECOMMENDATIONS.map((rec, idx) => (
+              {recommendations.map((rec, idx) => (
                 <div
                   key={idx}
                   className="self-stretch px-2 py-1 bg-neutral-700/20 rounded-md inline-flex justify-between items-center gap-2"

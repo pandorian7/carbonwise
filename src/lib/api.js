@@ -25,7 +25,6 @@ apiClient.interceptors.request.use((config) => {
 
 async function getEmissionEntries() {
   const res = await apiClient.get("/emission_entries");
-  //console.log(res.data);
   return res.data;
 }
 
