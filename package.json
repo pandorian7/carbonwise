@@ -23,12 +23,21 @@
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.515.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-is": "^19.1.0",
     "react-router": "^7.6.2",
+    "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
-    "tailwind-merge": "^3.3.1"
+    "recharts": "^3.0.2",
+    "swr": "^2.3.4",
+    "tailwind-merge": "^3.3.1",
+    "use-immer": "^0.11.0",
+    "use-local-storage-state": "^19.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

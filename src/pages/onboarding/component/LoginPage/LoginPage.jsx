@@ -3,46 +3,44 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import "./LoginPage.css";
 import { toast } from "react-toastify";
+import api from "@/lib/api";
+import { getAuth } from "@/contexts/auth-context";
 
 const Login = () => {
+  const { setToken } = getAuth();
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await axios.post("https://carbonwise-backend-1.onrender.com/users/login", {
-  email: formData.email,
-  password: formData.password
-});
 
- console.log(response.data);
+    try {
+      const token = await api.user.login(formData.email, formData.password);
+      setToken(token)
       toast.success("Login successful!");
       // Optionally store token here: localStorage.setItem('token', response.data.token)
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message ||
-        error.response?.data ||
-        error.message;
+        error.response?.data?.message || error.response?.data || error.message;
       toast.error("Login failed: " + errorMessage);
     }
   };
 
   const handleCreateClick = () => {
-    navigate('/logged');
+    navigate("/logged");
   };
 
   return (
@@ -63,7 +61,7 @@ const Login = () => {
 
         <main className="main-content">
           <div className="content-wrapper">
-            <form className="form-container"  onSubmit={handleSubmit}>
+            <form className="form-container" onSubmit={handleSubmit}>
               <div className="form-header">
                 <h1 className="form-title">Login to CarbonWise</h1>
                 <p className="form-subtitle">
@@ -99,7 +97,9 @@ const Login = () => {
                   />
                 </div>
 
-                <button type="submit" className="login-button" >Log In</button>
+                <button type="submit" className="login-button">
+                  Log In
+                </button>
               </div>
 
               <div className="divider">
@@ -151,7 +151,13 @@ const Login = () => {
 
               <p className="signup-text">
                 Don't have an account?
-                <button className="signup-link" type="button" onClick={handleCreateClick}>Create Account</button>
+                <button
+                  className="signup-link"
+                  type="button"
+                  onClick={handleCreateClick}
+                >
+                  Create Account
+                </button>
               </p>
             </form>
           </div>

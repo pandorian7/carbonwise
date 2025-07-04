@@ -23,7 +23,7 @@ function ToggleGroup({ options, selected, onChange }) {
   return (
     <div className="w-40 flex justify-start items-center gap-1">
       {Array.from({ length: options.length }).map((_, i) => (
-        <Button
+        <Button key={i}
           className={"w-20"}
           variant={selectedIndex == i ? "secondary" : "secondaryOutlined"}
           onClick={() => {

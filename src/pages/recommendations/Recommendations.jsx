@@ -4,8 +4,14 @@ import useBooleanSelector from "@/hooks/useBooleanSelector";
 import Tab from "@/components/ui/Tab";
 import RecommendationsTab from "./RecommendationsTab";
 import ActionPlanTab from "./ActionPlanTab";
+import api from "@/lib/api";
 
 function Recommendations() {
+
+  api.recommendations.get().then(
+    data => console.log(data)
+  )
+
   const [recommendations, actionPlan, setTab, selectedTab] = useBooleanSelector(
     2,
     1

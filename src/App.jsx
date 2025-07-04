@@ -7,12 +7,21 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
-import Reports from "./pages/reportandAnalysis/report";
 
-import api from "./lib/api";
-import { getUser } from "./lib/auth";
+import Reports from "./pages/reportandAnalysis/report";
+import { getAuth } from "./contexts/auth-context";
+import { useNavigate } from "react-router";
+
 
 function App() {
+
+  const {user} = getAuth()
+  const navigate = useNavigate()
+
+  if (!user) {
+    navigate('/')
+  }
+
   const titles = [
     "Dashboard",
     "Carbon Calculator",

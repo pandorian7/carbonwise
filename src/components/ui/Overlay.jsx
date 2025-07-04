@@ -41,7 +41,7 @@ const Overlay = forwardRef(({ children }, ref) => {
         opacity: visible,
         transitionDuration: "0.2s",
         pointerEvents: visible ? "auto" : "none",
-        zIndex: 100
+        zIndex: 1
       }}
     >
       {content}

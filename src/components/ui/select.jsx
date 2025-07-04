@@ -139,17 +139,18 @@ function SelectExt({
   widthClass = "w-[180px]",
   placeholder = "Placeholder",
   items = {},
+  onChange=()=>{}
 }) {
   // console.log(items);
   return (
-    <Select>
+    <Select onValueChange={onChange}>
       <SelectTrigger className={widthClass}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           {Object.entries(items).map(([key, value], index) => (
-            <SelectItem value={key} key={index}>
+            <SelectItem value={key} key={key}>
               {value}
             </SelectItem>
           ))}

@@ -38,7 +38,7 @@ function EnergyModel({onClose}) {
       user: getUser()
     }
 
-    api.emissionEntries.save.energy([dataelec, datagas]).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))
+    api.emissionEntries.save([dataelec, datagas]).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))
     // toast.success("test")
   }
 
