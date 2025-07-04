@@ -1,6 +1,4 @@
 import axios from "axios";
-import { getUser } from "./auth";
-
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -34,9 +32,22 @@ async function saveEnerygEmissionData(data) {
   await Promise.all(pool);
 }
 
+async function login(email, password) {
+  const res = await apiClient.post("/users/login", { email, password });
+  const { token } = res.data;
+  return token;
+}
+
+async function getRecommendations() {
+  const res = await apiClient('/recommendations');
+  return res.data;
+}
+
 export default {
   emissionEntries: {
     get: getEmissionEntries,
     save: saveEnerygEmissionData,
   },
+  user: { login },
+  recommendations: {get: getRecommendations}
 };
