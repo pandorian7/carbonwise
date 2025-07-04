@@ -20,8 +20,8 @@ apiClient.interceptors.request.use((config) => {
 });
 
 async function getEmissionEntries() {
-  const user = getUser();
-  const res = await apiClient.get(`/emission_entries/getUserById/${user.id}`);
+  const res = await apiClient.get("/emission_entries");
+  return res.data
 }
 
 async function saveEnerygEmissionData(data) {

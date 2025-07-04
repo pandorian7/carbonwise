@@ -97,7 +97,7 @@ function Sidebar({ activeView, changeView }) {
         </div>
       )}
 
-      <UserDropDown name={user.name} email={user.email} />
+      {user && <UserDropDown name={user.name} email={user.email} />}
     </div>
   );
 }
