@@ -6,7 +6,7 @@ import { Button, IconButton } from "../Button";
 
 function Model({ title, children, description, onClose, onSubmit}) {
   return (
-    <div className="w-full max-w-[780px] bg-base-sidebar-background rounded-[20px] inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
+    <div className="w-full max-h-[1000px] max-w-[1440px] bg-base-sidebar-background rounded-[20px] inline-flex flex-col justify-start items-start gap-2 overflow-hidden">
       <div className="self-stretch p-4 bg-base-background inline-flex justify-center items-center gap-2">
         <div className="flex-1 justify-start text-base-foreground text-base font-semibold font-['Plus_Jakarta_Sans'] leading-tight">
           {title}

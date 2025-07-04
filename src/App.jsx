@@ -7,8 +7,11 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
+
+import Reports from "./pages/reportandAnalysis/Report";
 import { getAuth } from "./contexts/auth-context";
 import { useNavigate } from "react-router";
+
 
 function App() {
 
@@ -23,7 +26,7 @@ function App() {
     "Dashboard",
     "Carbon Calculator",
     "Recommendations",
-    "Reports & Analysis",
+    "Reports",
     "Settings",
   ];
 
@@ -51,6 +54,7 @@ function App() {
           {dashboard && <Dashboard />}
           {calculator && <CarbonCalculator />}
           {recommendations && <Recommendations/>}
+          {reports && <Reports/> }
         </div>
       </div>
     </div>
