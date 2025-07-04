@@ -1,4 +1,8 @@
 import axios from "axios";
+import { getUser } from "./auth";
+import Recommendations from "@/pages/recommendations/Recommendations";
+
+console.log(import.meta.env.VITE_API_URL);
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -21,7 +25,7 @@ apiClient.interceptors.request.use((config) => {
 
 async function getEmissionEntries() {
   const res = await apiClient.get("/emission_entries");
-  return res.data
+  return res.data;
 }
 
 async function saveEnerygEmissionData(data) {
@@ -43,11 +47,22 @@ async function getRecommendations() {
   return res.data;
 }
 
+async function getAllEmissonEntries () {
+  const res = await apiClient.get("emission_entries/getAllEmissionEntries");
+  return res.data;
+}
+
+
 export default {
   emissionEntries: {
     get: getEmissionEntries,
     save: saveEnerygEmissionData,
   },
   user: { login },
-  recommendations: {get: getRecommendations}
+
+  recommendations: {get: getRecommendations},
+
+  allEmissionEnties: {
+    get: getAllEmissonEntries,
+  },
 };
