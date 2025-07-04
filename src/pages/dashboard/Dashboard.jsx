@@ -59,10 +59,19 @@ function Dashboard() {
       </div>
 
       <div className="self-stretch rounded-md inline-flex justify-start items-start gap-6 mx-6">
-        <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3">
-          <div className="self-stretch inline-flex justify-center items-center gap-2">
+        <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 relative">
+          <div
+            className="absolute inset-0 z-10 backdrop-blur-md bg-black/20 pointer-events-auto"
+            style={{
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+          />
+          <div className="self-stretch inline-flex justify-center items-center gap-2 relative z-20">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Goal Progress</div>
-            <Button variant='secondaryOutlined'>See All</Button>
+            <Button variant='secondaryOutlined' className="relative z-30 pointer-events-auto">See All</Button>
           </div>
           <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789</div>
           <div
