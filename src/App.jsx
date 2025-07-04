@@ -7,6 +7,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
+import Reports from "./pages/reportandAnalysis/report";
 
 import api from "./lib/api";
 import { getUser } from "./lib/auth";
@@ -16,7 +17,7 @@ function App() {
     "Dashboard",
     "Carbon Calculator",
     "Recommendations",
-    "Reports & Analysis",
+    "Reports",
     "Settings",
   ];
 
@@ -32,9 +33,6 @@ function App() {
 
   const title = (index) => titles.at(index - 1);
 
-  console.log(api.emissionEntries.get())
-  console.log(getUser())
-
   return (
     <div className="w-full h-[100vh] px-2 pt-2 bg-base-sidebar-background inline-flex justify-start items-start overflow-hidden">
       <Sidebar
@@ -47,6 +45,7 @@ function App() {
           {dashboard && <Dashboard />}
           {calculator && <CarbonCalculator />}
           {recommendations && <Recommendations/>}
+          {reports && <Reports/> }
         </div>
       </div>
     </div>
