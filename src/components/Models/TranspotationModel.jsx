@@ -37,7 +37,6 @@ function TranspotationModel({ onClose }) {
         unit: fuelUnit,
         amount: fuelUsage[0],
         date: new Date().toISOString().slice(0, 10),
-        user: getUser()
       },
       {
         data: "Business Air Travel",
@@ -46,7 +45,6 @@ function TranspotationModel({ onClose }) {
         iataAirportTo: BATTo,
         numberOfPassengers: nPassengers[0],
         date: new Date().toISOString().slice(0, 10),
-        user: getUser()
       },
       {
         data: "Employee Commuting",
@@ -55,7 +53,6 @@ function TranspotationModel({ onClose }) {
         unit: employeeCommutingUnit,
         amount: employeeCommuting[0],
         date: new Date().toISOString().slice(0, 10),
-        user: getUser()
       },
     ];
   };

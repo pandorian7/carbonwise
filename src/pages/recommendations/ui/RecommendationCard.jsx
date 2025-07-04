@@ -4,9 +4,9 @@ import ColorPill from "./ColorPill";
 
 
 
-function Card({title, content: {carbonImapct=0, benefits=0, paybackPerios=0, difficulty="Low" }}) {
+function Card({title, content: {carbonImapct=0, benefits=0, implementationCost=0, difficulty="Low" }}) {
   return (
-    <div className="flex-1 max-w-96 min-w-72 mx-auto p-4 rounded-2xl outline outline-offset-[-1px] outline-base-border inline-flex flex-col justify-center items-start gap-3 overflow-hidden">
+    <div className="flex-1 max-w-96 min-w-72  p-4 rounded-2xl outline outline-offset-[-1px] outline-base-border inline-flex flex-col justify-center items-start gap-3 overflow-hidden">
       <div className="self-stretch justify-start text-white text-sm font-bold font-['Plus_Jakarta_Sans'] leading-tight">
         {title}
       </div>
@@ -29,10 +29,10 @@ function Card({title, content: {carbonImapct=0, benefits=0, paybackPerios=0, dif
         </div>
         <div className="self-stretch inline-flex justify-center items-center gap-2">
           <div className="flex-1 justify-start text-base-muted-foreground text-xs font-normal font-['Inter'] leading-tight">
-            Payback Period:
+            Implementation Cost:
           </div>
           <div className="flex-1 max-w-28 text-right justify-start text-white text-xs font-normal font-['Inter'] leading-tight">
-            {paybackPerios} months
+            $ {implementationCost}
           </div>
         </div>
         <div className="self-stretch inline-flex justify-center items-center gap-2">
@@ -46,7 +46,7 @@ function Card({title, content: {carbonImapct=0, benefits=0, paybackPerios=0, dif
                 {difficulty}
               </div>
             </div> */}
-            <ColorPill difficulty="Low"/>
+            <ColorPill difficulty={difficulty}/>
           </div>
         </div>
       </div>

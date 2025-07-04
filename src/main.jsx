@@ -6,12 +6,15 @@ import Router from "./Router";
 
 import { BrowserRouter } from "react-router";
 import { ToastContainer } from "react-toastify";
+import GlobalContext from '@/contexts/global-context'
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <StrictMode>
-      <ToastContainer />
-      <Router />
+      <GlobalContext>
+        <ToastContainer />
+        <Router />
+      </GlobalContext>
     </StrictMode>
   </BrowserRouter>
 );

@@ -26,7 +26,6 @@ function EnergyModel({onClose}) {
       amount: elecUsage[0],
       unit: elecUnit,
       date: new Date().toISOString().slice(0, 10),
-      user: getUser()
     }
 
     const datagas = {
@@ -35,7 +34,6 @@ function EnergyModel({onClose}) {
       amount: gasUsage[0],
       unit: gasUnit,
       date: new Date().toISOString().slice(0, 10),
-      user: getUser()
     }
 
     api.emissionEntries.save([dataelec, datagas]).then(()=> toast.success("Saved Successfully")).catch(()=> toast.error("Something Went Wrong"))

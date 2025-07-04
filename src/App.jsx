@@ -8,12 +8,25 @@ import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
 
+import Reports from "./pages/reportandAnalysis/Report";
+import { getAuth } from "./contexts/auth-context";
+import { useNavigate } from "react-router";
+
+
 function App() {
+
+  const {user} = getAuth()
+  const navigate = useNavigate()
+
+  if (!user) {
+    navigate('/')
+  }
+
   const titles = [
     "Dashboard",
     "Carbon Calculator",
     "Recommendations",
-    "Reports & Analysis",
+    "Reports",
     "Settings",
   ];
 
@@ -38,9 +51,10 @@ function App() {
       <div className="flex-1 self-stretch min-w-[560px] bg-base-background rounded-tl-2xl rounded-tr-2xl inline-flex flex-col justify-start items-center overflow-hidden">
         <Breadcrumb title={title(activeView)} Icon={PanelLeftIcon} />
         <div className="w-full h-full flex flex-col overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-base-muted-foreground/80 scrollbar-track-base-sidebar-accent">
-          {dashboard && <Dashboard />}
+          {dashboard && <Dashboard changeView={changeView} />}
           {calculator && <CarbonCalculator />}
           {recommendations && <Recommendations/>}
+          {reports && <Reports/> }
         </div>
       </div>
     </div>

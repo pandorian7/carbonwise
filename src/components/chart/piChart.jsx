@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pie, PieChart, Cell } from "recharts";
-
-const initialChartData = [
-  { name: "Electricity", value: 450, color: "#2563eb" }, // Blue
-  { name: "Transport", value: 450, color: "#ef4444" }, // Red
-  { name: "Waste", value: 450, color: "#f59e0b" }, // Yellow
-  { name: "Water", value: 450, color: "#8b5cf6" }, // Purple
-  { name: "Purchased Goods", value: 450, color: "#10b981" }, // Green
-  { name: "Others", value: 450, color: "#374151" }, // Gray
-];
+import { getCachedData } from '@/lib/utilsDashboard';
 
 export default function EmissionsChart() {
-  const [chartData] = useState(initialChartData);
+  // Try to get data from cache first, then fallback to localStorage
+  const cachedData = getCachedData();
+  const chartData = cachedData.categoryEmissions || 
+    (() => {
+      try {
+        const rawData = localStorage.getItem("categoryEmissions");
+        return rawData ? JSON.parse(rawData) : [];
+      } catch (error) {
+        console.error("Error reading category emissions from localStorage:", error);
+        return [];
+      }
+    })();
+
   const totalValue = chartData.reduce((sum, item) => sum + item.value, 0);
+
+  if (!chartData.length || totalValue === 0) {
+    return (
+      <div className="text-center text-gray-400">
+        No emissions data available to display.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-start items-start px-4">
@@ -53,7 +65,7 @@ export default function EmissionsChart() {
                 ></div>
                 <span>{item.name}</span>
               </div>
-              <span className="text-right">{item.value} kg CO₂e</span> 
+              <span className="text-right">{item.value} kg CO₂e</span>
               <span className="text-right text-gray-400">
                 {((item.value / totalValue) * 100).toFixed(1)}%
               </span>
