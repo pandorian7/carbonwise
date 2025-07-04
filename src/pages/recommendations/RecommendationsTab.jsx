@@ -18,7 +18,6 @@ function Loading() {
 }
 function Content({ data }) {
 
-  console.log(data)
 
   return (
     <div className="self-stretch pt-4 inline-flex flex-col justify-start items-start">

@@ -63,7 +63,6 @@ function ResourceConsumptionModel({ onClose }) {
         amount: state.material.raw.amount[0],
         unit: state.material.raw.unit,
         date: new Date().toISOString().slice(0, 10),
-        user: getUser(),
       });
     }
 
@@ -74,7 +73,6 @@ function ResourceConsumptionModel({ onClose }) {
         amount: state.material.packaging.amount[0],
         unit: state.material.packaging.unit,
         date: new Date().toISOString().slice(0, 10),
-        user: getUser(),
       });
     }
 
@@ -85,7 +83,6 @@ function ResourceConsumptionModel({ onClose }) {
         amount: state.water.amount[0],
         unit: state.water.unit,
         date: new Date().toISOString().slice(0, 10),
-        user: getUser(),
       });
     }
 
@@ -96,7 +93,6 @@ function ResourceConsumptionModel({ onClose }) {
         amount: state.waste.amount[0],
         unit: state.waste.unit,
         date: new Date().toISOString().slice(0, 10),
-        user: getUser(),
       });
     }
     
