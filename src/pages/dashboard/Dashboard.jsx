@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
-
 import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
-
 import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
 import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
-import api from "@/lib/api";
 import {saveEmissionDataCategoriesToLocalStorage, saveDashboardRecommendationSummery} from '@/lib/utilsDashboard';
 
 function Dashboard() {
@@ -33,6 +30,13 @@ function Dashboard() {
   saveDashboardRecommendationSummery();
 
   const RECOMMENDATIONS = JSON.parse(localStorage.getItem("dashboardRecommendations"));
+
+  const navigate = useNavigate()
+
+  const handleNavigatePricing = () => {
+    navigate("/pricing");
+  }
+
 
   return (
     <>
@@ -61,7 +65,7 @@ function Dashboard() {
       <div className="self-stretch rounded-md inline-flex justify-start items-start gap-6 mx-6">
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 relative">
           <div
-            className="absolute inset-0 z-10 backdrop-blur-md bg-black/20 pointer-events-auto"
+            className="absolute inset-0 z-10 backdrop-blur-sm bg-black/5 pointer-events-auto"
             style={{
               top: 0,
               left: 0,
@@ -71,9 +75,9 @@ function Dashboard() {
           />
           <div className="self-stretch inline-flex justify-center items-center gap-2 relative z-20">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Goal Progress</div>
-            <Button variant='secondaryOutlined' className="relative z-30 pointer-events-auto">See All</Button>
+            <Button variant='secondaryOutlined' className="relative z-30 pointer-events-auto"  onClick={handleNavigatePricing} >See All</Button>
           </div>
-          <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789</div>
+          <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789,256</div>
           <div
             data-active="False"
             data-horizontal="True"
