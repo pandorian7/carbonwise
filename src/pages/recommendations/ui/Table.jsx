@@ -16,6 +16,7 @@ import useOption from "@/hooks/useOption";
 import ColorPill from "./ColorPill";
 import { IconButton } from "@/components/ui/Button";
 import { PlusIcon } from "lucide-react";
+import { useEffect } from "react";
 
 {
   /* <div className="self-stretch inline-flex flex-col justify-start items-start">
@@ -34,15 +35,15 @@ import { PlusIcon } from "lucide-react";
  * @property {string} title
  * @property {string} category
  * @property {number} carbonImpact
- * @property {number} finantialImpact
- * @property {number} cost
- * @property {string} priority
+ * @property {number} financialImpact
+ * @property {number} implementationCost
+ * @property {string} implementationCost
  */
 
 /**
  * @param {{ data: TableRowData[] }} props
  */
-function TableX({ data = [] }) {
+function TableX({ data = []}) {
   /** @type {[TableRowData[], React.Dispatch<React.SetStateAction<TableRowData[]>>]} */
   const [content, setContent] = React.useState(data);
 
@@ -61,7 +62,34 @@ function TableX({ data = [] }) {
   const {
     options: [asc, desc],
     select: orderBy,
+    active: orderedBy,
   } = useOption(2, 1);
+
+  useEffect(() => {
+    const comp = (() => {
+      if (byTitle) return (r) => r.title;
+      if (byCategory) return (r) => r.category;
+      if (byCarbonImpact) return (r) => r.carbonImpact;
+      if (byFinancialImpact) return (r) => r.financialImpact;
+      if (byCost) return (r) => r.implementationCost;
+      if (byPriority)
+        return (r) =>
+          ["Low", "Medium", "High"].indexOf(r.implementationDifficulty);
+    })();
+    const ordered = [...content];
+    ordered.sort((a, b) => {
+      const ca = comp(a);
+      const cb = comp(b);
+      if (ca == cb) return 0;
+      if (ca < cb) return -1;
+      if (ca > cb) return 1;
+    });
+    if (desc) {
+      ordered.reverse();
+    }
+
+    setContent(ordered);
+  }, [sortedBy, orderedBy]);
 
   const Arrow = () =>
     asc ? <ChevronDownIcon size={16} /> : <ChevronUpIcon size={16} />;
@@ -152,16 +180,18 @@ function TableX({ data = [] }) {
                 {row.carbonImpact}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
-                {row.finantialImpact.toLocaleString()}
+                {row.financialImpact.toLocaleString()}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
-                {row.cost.toLocaleString()}
+                {row.implementationCost.toLocaleString()}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
-                <ColorPill difficulty={row.priority} />
+                <ColorPill difficulty={row.implementationDifficulty} />
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
-                <IconButton variant="secondary" Icon={PlusIcon}>Add to Plan</IconButton>
+                <IconButton variant="secondary" Icon={PlusIcon}>
+                  Add to Plan
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
