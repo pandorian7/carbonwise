@@ -8,7 +8,7 @@ import Breadcrumb from "./components/ui/Breadcrumb";
 import { PanelLeftIcon } from "lucide-react";
 import Recommendations from "./pages/recommendations/Recommendations";
 
-import Reports from "./pages/reportandAnalysis/report";
+import Reports from "./pages/reportandAnalysis/Report";
 import { getAuth } from "./contexts/auth-context";
 import { useNavigate } from "react-router";
 
