@@ -7,7 +7,6 @@ const dataCache = {
   currentUserTotalEmissions: 0,
   dashboardRecommendations: null,
   lastUpdated: null,
-  // New cache for period-based emissions
   periodEmissions: {
     Daily: 0,
     Monthly: 0,

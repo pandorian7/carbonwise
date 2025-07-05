@@ -232,7 +232,7 @@ function Dashboard({ changeView }) {
   }, [isDropdownOpen]);
 
   {/*Goal progress*/ }
-  const currentGoalProgress = 1789;
+  const currentGoalProgress = 2500;
   const totalGoalForProgress = 2500;
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
@@ -322,17 +322,17 @@ function Dashboard({ changeView }) {
       <div className="self-stretch rounded-md inline-flex justify-start items-start gap-6 mx-6">
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 relative">
           <div
-            className="absolute inset-0 z-10 backdrop-blur-sm bg-black/5 pointer-events-auto"
+            className="absolute inset-0 z-10 backdrop-blur-sm bg-black/1 pointer-events-auto rounded-2xl"
             style={{
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              top: 1,
+              left: 1,
+              right: 1,
+              bottom: 1,
             }}
           />
           <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-auto">
             <div 
-              className="text-white text-2xl font-semibold font-['Inter'] leading-tight mt-15 cursor-pointer hover:text-gray-200 transition-colors flex items-center gap-2"
+              className="text-black text-xl font-semibold font-['Inter'] leading-tight mt-16 cursor-pointer hover:text-black transition-all duration-300 flex items-center gap-2 bg-white/20 hover:bg-white/10 px-50 py-1 rounded-lg"
               onClick={handleNavigatePricing}
             >
               <Crown className="w-6 h-6" />
