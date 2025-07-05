@@ -9,10 +9,11 @@ import EmissionsChart from "@/components/chart/piChart";
 import { MoonLoader } from "react-spinners";
 import { 
   fetchAndStoreEmissionData, 
-  fetchAndStoreUserEmissionData, 
   fetchAndStoreRecommendations,
-  getCachedData
+  getCachedData,
+  getBenchmarkByPeriod
 } from '@/lib/utilsDashboard';
+import api from '@/lib/api';
 
 function Dashboard({ changeView }) {
 
@@ -25,11 +26,71 @@ function Dashboard({ changeView }) {
   const [currentEmissions, setCurrentEmissions] = useState(0);
   const [recommendations, setRecommendations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // New state for categorized period emissions
+  const [periodEmissions, setPeriodEmissions] = useState({
+    Daily: 0,
+    Monthly: 0,
+    Annually: 0
+  });
 
- 
   useEffect(() => {
     loadDashboardData();
   }, []);
+
+  // Update current emissions when selected period changes
+  useEffect(() => {
+    if (periodEmissions[selectedPeriod] !== undefined) {
+      setCurrentEmissions(periodEmissions[selectedPeriod]);
+      console.log('Period changed to:', selectedPeriod, 'Emissions:', periodEmissions[selectedPeriod]);
+    }
+  }, [selectedPeriod, periodEmissions]);
+
+  // Single function to calculate all period emissions from raw data
+  const calculateAllPeriodEmissions = (data) => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const currentDay = today.getDate();
+    
+    const periods = {
+      Daily: 0,
+      Monthly: 0,
+      Annually: 0
+    };
+    
+    data.forEach(entry => {
+      if (!entry.date || typeof entry.co2Emission !== 'number') return;
+      
+      const entryDate = new Date(entry.date);
+      const emission = entry.co2Emission;
+      
+      // Daily - only today's entries
+      if (entryDate.getDate() === currentDay && 
+          entryDate.getMonth() === currentMonth && 
+          entryDate.getFullYear() === currentYear) {
+        periods.Daily += emission;
+      }
+      
+      // Monthly - current month's entries
+      if (entryDate.getMonth() === currentMonth && 
+          entryDate.getFullYear() === currentYear) {
+        periods.Monthly += emission;
+      }
+      
+      // Annually - current year's entries
+      if (entryDate.getFullYear() === currentYear) {
+        periods.Annually += emission;
+      }
+    });
+    
+    // Round to 2 decimal places
+    Object.keys(periods).forEach(period => {
+      periods[period] = parseFloat(periods[period].toFixed(2));
+    });
+    
+    return periods;
+  };
 
   const loadDashboardData = async () => {
     setIsLoading(true);
@@ -39,27 +100,37 @@ function Dashboard({ changeView }) {
       if (cachedData.lastUpdated) {
         setMonthlyEmissions(cachedData.monthlyEmissions || []);
         setTotal(cachedData.totalEmissions || 0);
-        setCurrentEmissions(cachedData.currentUserTotalEmissions || 0);
         setRecommendations(cachedData.dashboardRecommendations);
+        
+        // Use cached period emissions if available
+        if (cachedData.periodEmissions) {
+          setPeriodEmissions(cachedData.periodEmissions);
+          setCurrentEmissions(cachedData.periodEmissions[selectedPeriod] || 0);
+        }
+        
         setIsLoading(false);
       } else {
         // Fallback to localStorage if cache is empty
         const storedMonthlyEmissions = JSON.parse(localStorage.getItem("monthlyEmissions") || "[]");
         const storedTotal = JSON.parse(localStorage.getItem("totalEmissions") || "0");
-        const storedCurrentEmissions = JSON.parse(localStorage.getItem("currentUserTotalEmissions") || "0");
         const storedRecommendations = JSON.parse(localStorage.getItem("dashboardRecommendations") || "null");
+        const storedPeriodEmissions = JSON.parse(localStorage.getItem("periodEmissions") || "null");
 
         setMonthlyEmissions(storedMonthlyEmissions);
         setTotal(storedTotal);
-        setCurrentEmissions(storedCurrentEmissions);
         setRecommendations(storedRecommendations);
+        
+        if (storedPeriodEmissions) {
+          setPeriodEmissions(storedPeriodEmissions);
+          setCurrentEmissions(storedPeriodEmissions[selectedPeriod] || 0);
+        }
+        
         setIsLoading(false);
       }
 
       // Fetch fresh data in background and update cache
-      const [emissionData, userEmissionData, recommendationsData] = await Promise.allSettled([
+      const [emissionData, recommendationsData] = await Promise.allSettled([
         fetchAndStoreEmissionData(),
-        fetchAndStoreUserEmissionData(),
         fetchAndStoreRecommendations()
       ]);
 
@@ -70,16 +141,38 @@ function Dashboard({ changeView }) {
         setTotal(freshCachedData.totalEmissions || 0);
       }
 
-      if (userEmissionData.status === 'fulfilled') {
-        const freshCachedData = getCachedData();
-        setCurrentEmissions(freshCachedData.currentUserTotalEmissions || 0);
-      }
-
       if (recommendationsData.status === 'fulfilled') {
         const freshCachedData = getCachedData();
         setRecommendations(freshCachedData.dashboardRecommendations);
       }
 
+      // Fetch user emission data directly and calculate periods
+      try {
+        const userEmissionResponse = await api.emissionEntries.get();
+        const userData = Array.isArray(userEmissionResponse) && userEmissionResponse.length > 0 ? userEmissionResponse : [];
+        
+        const calculatedPeriods = calculateAllPeriodEmissions(userData);
+        setPeriodEmissions(calculatedPeriods);
+        
+        // Set current emissions based on selected period
+        setCurrentEmissions(calculatedPeriods[selectedPeriod]);
+        
+        // Update cache with period emissions
+        const updatedCache = getCachedData();
+        updatedCache.periodEmissions = calculatedPeriods;
+        updatedCache.lastUpdated = Date.now();
+        
+        // Save to localStorage
+        localStorage.setItem("periodEmissions", JSON.stringify(calculatedPeriods));
+        
+        console.log('Calculated period emissions:', calculatedPeriods);
+        console.log('Selected period:', selectedPeriod);
+        console.log('Current emissions set to:', calculatedPeriods[selectedPeriod]);
+      } catch (error) {
+        console.error("Error fetching user emission data:", error);
+      }
+
+      setIsLoading(false);
     } catch (error) {
       console.error("Error loading dashboard data:", error);
       setIsLoading(false);
@@ -144,7 +237,7 @@ function Dashboard({ changeView }) {
   const goalProgressPercentage = (currentGoalProgress / totalGoalForProgress) * 100;
 
   {/*Emmision per employee*/ }
-  const benchmarkEmissions = 10000000;
+  const benchmarkEmissions = getBenchmarkByPeriod(selectedPeriod);
   const emissionsProgressPercentage = (currentEmissions / benchmarkEmissions) * 100;
 
   const navigate = useNavigate()
@@ -253,7 +346,7 @@ function Dashboard({ changeView }) {
           >
             <div className="flex-1 self-stretch relative overflow-hidden rounded-lg">
               <div
-                className="h-10 left-0 top-0 absolute bg-lime-400"
+                className="h-10 left-0 top-0 absolute bg-lime-400 transition-all duration-500 ease-in-out"
                 style={{ width: `${goalProgressPercentage}%` }}
               />
               <div className="w-full h-full bg-neutral-700 rounded-lg" />
@@ -271,7 +364,7 @@ function Dashboard({ changeView }) {
 
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3">
           <div className="self-stretch inline-flex justify-center items-center gap-2">
-            <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Emissions per Employee</div>
+            <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">{selectedPeriod} Emissions</div>
             <Button variant='secondaryOutlined'>See All</Button>
           </div>
           <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">{currentEmissions} kg CO₂e</div>
@@ -288,7 +381,7 @@ function Dashboard({ changeView }) {
             <div className="flex-1 self-stretch relative overflow-hidden rounded-lg">
               <div className="w-full h-full bg-neutral-700 rounded-lg" />
               <div
-                className="h-10 left-0 top-0 absolute bg-lime-400"
+                className="h-10 left-0 top-0 absolute bg-lime-400 transition-all duration-500 ease-in-out"
                 style={{ width: `${emissionsProgressPercentage}%` }}
               />
             </div>

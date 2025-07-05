@@ -6,7 +6,13 @@ const dataCache = {
   totalEmissions: 0,
   currentUserTotalEmissions: 0,
   dashboardRecommendations: null,
-  lastUpdated: null
+  lastUpdated: null,
+  // New cache for period-based emissions
+  periodEmissions: {
+    Daily: 0,
+    Monthly: 0,
+    Annually: 0
+  }
 };
 
 const getFromStorage = (key, fallback = null) => {
@@ -57,7 +63,7 @@ const processEmissionData = (data) => {
 
   data.forEach(entry => {
     if (!entry.co2Emission || typeof entry.co2Emission !== 'number') return;
-    
+
     const emission = entry.co2Emission;
     totalEmission += emission;
 
@@ -117,21 +123,21 @@ export async function fetchAndStoreEmissionData() {
   try {
     const response = await api.emissionEntries.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
-    
+
     // Process data once for both monthly and category summaries
     const processedData = processEmissionData(data);
-    
+
     // Update cache
     dataCache.monthlyEmissions = processedData.monthlyEmissions;
     dataCache.categoryEmissions = processedData.categoryEmissions;
     dataCache.totalEmissions = processedData.totalEmissions;
     dataCache.lastUpdated = Date.now();
-    
+
     // Save to localStorage for persistence
     saveToStorage("monthlyEmissions", processedData.monthlyEmissions);
     saveToStorage("categoryEmissions", processedData.categoryEmissions);
     saveToStorage("totalEmissions", processedData.totalEmissions);
-    
+
     console.log("Emission data processed and cached:", processedData);
     return data;
   } catch (error) {
@@ -141,22 +147,44 @@ export async function fetchAndStoreEmissionData() {
   }
 }
 
-export async function fetchAndStoreUserEmissionData() {
+// New function to calculate and cache all period emissions at once
+export const calculateAndCacheAllPeriodEmissions = (data) => {
+  const periods = ['Daily', 'Monthly', 'Annually'];
+  const periodData = {};
+  
+  periods.forEach(period => {
+    periodData[period] = calculateEmissionsByPeriod(data, period);
+  });
+  
+  // Update cache
+  dataCache.periodEmissions = periodData;
+  
+  // Save to localStorage
+  saveToStorage("periodEmissions", periodData);
+  
+  console.log("All period emissions calculated and cached:", periodData);
+  return periodData;
+};
+
+// Function to get cached emissions for a specific period
+export const getCachedPeriodEmissions = (selectedPeriod) => {
+  const cachedData = dataCache.periodEmissions || getFromStorage("periodEmissions", {});
+  return cachedData[selectedPeriod] || 0;
+};
+
+export async function fetchAndStoreUserEmissionData(selectedPeriod = 'Daily') {
   try {
     const response = await api.emissionEntries.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
     
-    const totalEmission = data.reduce((sum, entry) => {
-      if (!entry.date || typeof entry.co2Emission !== 'number') return sum;
-      return sum + entry.co2Emission;
-    }, 0);
-
-    const userTotal = parseFloat(totalEmission.toFixed(2));
+    // Calculate all periods at once and cache them
+    const allPeriodEmissions = calculateAndCacheAllPeriodEmissions(data);
     
-    // Update cache
+    // Return the requested period's emissions
+    const userTotal = parseFloat(allPeriodEmissions[selectedPeriod].toFixed(2));
+    
+    // Update legacy cache for backward compatibility
     dataCache.currentUserTotalEmissions = userTotal;
-    
-    // Save to localStorage
     saveToStorage("currentUserTotalEmissions", userTotal);
     
     return userTotal;
@@ -170,11 +198,72 @@ export async function fetchAndStoreUserEmissionData() {
   }
 }
 
+// New function to calculate emissions based on selected period
+export const calculateEmissionsByPeriod = (data, selectedPeriod) => {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  const currentDay = today.getDate();
+
+  return data.reduce((sum, entry) => {
+    if (!entry.date || typeof entry.co2Emission !== 'number') return sum;
+
+    const entryDate = new Date(entry.date);
+
+    switch (selectedPeriod) {
+      case 'Daily':
+        // Only include entries from today
+        if (entryDate.getDate() === currentDay &&
+          entryDate.getMonth() === currentMonth &&
+          entryDate.getFullYear() === currentYear) {
+          return sum + entry.co2Emission;
+        }
+        break;
+      case 'Monthly':
+        // Only include entries from current month
+        if (entryDate.getMonth() === currentMonth &&
+          entryDate.getFullYear() === currentYear) {
+          return sum + entry.co2Emission;
+        }
+        break;
+      case 'Annually':
+        // Only include entries from current year
+        if (entryDate.getFullYear() === currentYear) {
+          return sum + entry.co2Emission;
+        }
+        break;
+      default:
+        // Default to daily
+        if (entryDate.getDate() === currentDay &&
+          entryDate.getMonth() === currentMonth &&
+          entryDate.getFullYear() === currentYear) {
+          return sum + entry.co2Emission;
+        }
+    }
+
+    return sum;
+  }, 0);
+};
+
+// Function to get benchmark based on selected period
+export const getBenchmarkByPeriod = (selectedPeriod) => {
+  switch (selectedPeriod) {
+    case 'Daily':
+      return 100000; // Daily benchmark
+    case 'Monthly':
+      return 6000000; // Monthly benchmark
+    case 'Annually':
+      return 36500000; // Annual benchmark
+    default:
+      return 10000000; // Default benchmark
+  }
+};
+
 export async function fetchAndStoreRecommendations() {
   try {
     const response = await api.recommendations.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
-    
+
     processTopCategoryRecommendations(data);
     return data;
   } catch (error) {
@@ -201,7 +290,7 @@ export function saveDashboardRecommendationSummery() {
 
 const processTopCategoryRecommendations = (allRecommendations) => {
   const categoryEmissions = dataCache.categoryEmissions || getFromStorage("categoryEmissions", []);
-  
+
   if (!categoryEmissions || categoryEmissions.length === 0) {
     // If no category data, return null to trigger loading state
     dataCache.dashboardRecommendations = null;
@@ -233,19 +322,29 @@ const getFallbackEmissionData = () => {
     { month: 'May', value: 175.3 },
     { month: 'Jun', value: 200.7 }
   ];
-  
+
   const fallbackTotal = fallbackMonthlyData.reduce((sum, item) => sum + item.value, 0);
-  
+
   dataCache.monthlyEmissions = fallbackMonthlyData;
   dataCache.totalEmissions = fallbackTotal;
-  
+
   saveToStorage("monthlyEmissions", fallbackMonthlyData);
   saveToStorage("totalEmissions", fallbackTotal);
-  
+
   return fallbackMonthlyData;
 };
 
-export const getCachedData = () => dataCache;
+export const getCachedData = () => {
+  // Ensure periodEmissions is always present in cache
+  if (!dataCache.periodEmissions) {
+    dataCache.periodEmissions = {
+      Daily: 0,
+      Monthly: 0,
+      Annually: 0
+    };
+  }
+  return dataCache;
+};
 
 export const clearCache = () => {
   // Clear in-memory cache
@@ -254,13 +353,21 @@ export const clearCache = () => {
   });
   dataCache.lastUpdated = null;
   
+  // Reset period emissions cache
+  dataCache.periodEmissions = {
+    Daily: 0,
+    Monthly: 0,
+    Annually: 0
+  };
+  
   // Clear localStorage items
   const localStorageKeys = [
     "monthlyEmissions",
     "categoryEmissions", 
     "totalEmissions",
     "currentUserTotalEmissions",
-    "dashboardRecommendations"
+    "dashboardRecommendations",
+    "periodEmissions"
   ];
   
   localStorageKeys.forEach(key => {
