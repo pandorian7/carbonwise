@@ -55,7 +55,6 @@ const processEmissionData = (data) => {
 
   let totalEmission = 0;
 
-  // Single pass through data to aggregate both monthly and category data
   data.forEach(entry => {
     if (!entry.co2Emission || typeof entry.co2Emission !== 'number') return;
     
@@ -116,7 +115,7 @@ const processEmissionData = (data) => {
 
 export async function fetchAndStoreEmissionData() {
   try {
-    const response = await api.allEmissionEnties.get();
+    const response = await api.emissionEntries.get();
     const data = Array.isArray(response) && response.length > 0 ? response : [];
     
     // Process data once for both monthly and category summaries
@@ -209,16 +208,16 @@ const processTopCategoryRecommendations = (allRecommendations) => {
     return;
   }
 
-  // Simply take the last 4 recommendations instead of complex filtering
-  const lastFourRecommendations = allRecommendations
-    .slice(-4)
+  // Take up to 4 recommendations (not more than available)
+  const limitedRecommendations = allRecommendations
+    .slice(0, 4) // Take only first 4, not more
     .map(rec => rec.title || rec);
 
   // If we have recommendations, use them; otherwise return null for loading state
-  if (lastFourRecommendations.length > 0) {
-    dataCache.dashboardRecommendations = lastFourRecommendations;
-    saveToStorage("dashboardRecommendations", lastFourRecommendations);
-    console.log("Saved last 4 recommendations:", lastFourRecommendations);
+  if (limitedRecommendations.length > 0) {
+    dataCache.dashboardRecommendations = limitedRecommendations;
+    saveToStorage("dashboardRecommendations", limitedRecommendations);
+    console.log("Saved recommendations (max 4):", limitedRecommendations);
   } else {
     dataCache.dashboardRecommendations = null;
   }
@@ -249,9 +248,29 @@ const getFallbackEmissionData = () => {
 export const getCachedData = () => dataCache;
 
 export const clearCache = () => {
+  // Clear in-memory cache
   Object.keys(dataCache).forEach(key => {
     dataCache[key] = null;
   });
   dataCache.lastUpdated = null;
+  
+  // Clear localStorage items
+  const localStorageKeys = [
+    "monthlyEmissions",
+    "categoryEmissions", 
+    "totalEmissions",
+    "currentUserTotalEmissions",
+    "dashboardRecommendations"
+  ];
+  
+  localStorageKeys.forEach(key => {
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      console.error(`Error removing localStorage key ${key}:`, error);
+    }
+  });
+  
+  console.log("All dashboard cache and localStorage data cleared");
 };
 

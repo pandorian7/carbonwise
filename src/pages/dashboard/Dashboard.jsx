@@ -317,7 +317,13 @@ function Dashboard({ changeView }) {
           {Intl.NumberFormat('en-US').format(total)} kg CO₂e
         </div>
 
-        <LineChart emissionsData={monthlyEmissions} />
+        {monthlyEmissions && monthlyEmissions.length > 0 ? (
+          <LineChart emissionsData={monthlyEmissions} />
+        ) : (
+          <div className="flex w-full h-full justify-center items-center">
+            <span className="text-base-muted-foreground text-lg font-medium">No data available</span>
+          </div>
+        )}
       </div>
 
 
@@ -357,9 +363,8 @@ function Dashboard({ changeView }) {
                 </div>
               </>
             ) : (
-              <div className="flex w-full h-full justify-center items-center font-['Plus_Jakarta_Sans']">
-                <MoonLoader color="var(--color-lime-400)" size={50} />
-                <span className="text-5xl ml-3">Loading</span>
+              <div className="flex w-full h-full justify-center items-center">
+                <span className="text-base-muted-foreground text-lg font-medium">No data available</span>
               </div>
             )}
           </div>

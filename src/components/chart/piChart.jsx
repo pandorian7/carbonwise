@@ -20,8 +20,16 @@ export default function EmissionsChart() {
 
   if (!chartData.length || totalValue === 0) {
     return (
-      <div className="text-center text-gray-400">
-        No emissions data available to display.
+      <div className="flex flex-col justify-start items-start px-4">
+        <div className="flex justify-between w-full">
+          <span className="text-base font-medium text-base-muted-foreground">
+            Where Your Emissions Come From
+          </span>
+          <span className="text-sm font-medium text-lime-400">+25.66%</span>
+        </div>
+        <div className="flex w-full h-32 justify-center items-center">
+          <span className="text-base-muted-foreground text-lg font-medium">No data available</span>
+        </div>
       </div>
     );
   }

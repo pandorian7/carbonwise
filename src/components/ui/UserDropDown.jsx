@@ -1,6 +1,7 @@
 import { ChevronsUpDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { getAuth } from "@/contexts/auth-context";
+import { clearCache } from "@/lib/utilsDashboard";
 
 function UserDropDown({
   name = "name",
@@ -9,7 +10,11 @@ function UserDropDown({
 }) {
   const { setToken } = getAuth();
 
-  const onLogOut = () => setToken(null)
+  const onLogOut = () => {
+    // Clear all cached data before logging out
+    clearCache();
+    setToken(null);
+  }
 
   return (
     <div className="w-64 p-2 bottom-2 left-0 absolute flex flex-col justify-start items-start gap-2">
