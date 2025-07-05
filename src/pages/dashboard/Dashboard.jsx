@@ -322,7 +322,7 @@ function Dashboard({ changeView }) {
       <div className="self-stretch rounded-md inline-flex justify-start items-start gap-6 mx-6">
         <div className="flex-1 p-4 rounded-2xl outline-1 outline-offset-[-1px] outline-base-border inline-flex flex-col justify-start items-start gap-3 relative">
           <div
-            className="absolute inset-0 z-10 backdrop-blur-sm bg-black/1 pointer-events-auto rounded-2xl"
+            className="absolute inset-0 z-10 backdrop-blur-sm bg-black/5 pointer-events-auto rounded-2xl"
             style={{
               top: 1,
               left: 1,
@@ -332,7 +332,7 @@ function Dashboard({ changeView }) {
           />
           <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-auto">
             <div 
-              className="text-black text-xl font-semibold font-['Inter'] leading-tight mt-16 cursor-pointer hover:text-black transition-all duration-300 flex items-center gap-2 bg-white/20 hover:bg-white/10 px-50 py-1 rounded-lg"
+              className="text-black text-xl font-semibold font-['Inter'] leading-tight mt-16 cursor-pointer hover:text-black transition-all duration-300 flex items-center gap-2 bg-white/25 hover:bg-white/5 px-50 py-1 rounded-lg"
               onClick={handleNavigatePricing}
             >
               <Crown className="w-6 h-6" />
