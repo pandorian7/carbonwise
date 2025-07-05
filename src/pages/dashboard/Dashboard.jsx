@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { PanelLeftIcon, SearchIcon } from "lucide-react";
 import { IconButton, IconButtonR, Button } from "@/components/ui/Button";
-import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp } from 'lucide-react'
+import { PlusIcon, Calendar1Icon, ChevronDown, ChevronRight, TrendingUp, Crown } from 'lucide-react'
 import LineChart from "@/components/chart/lineChart";
 import EmissionsChart from "@/components/chart/piChart";
 import { MoonLoader } from "react-spinners";
@@ -330,9 +330,18 @@ function Dashboard({ changeView }) {
               bottom: 0,
             }}
           />
+          <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-auto">
+            <div 
+              className="text-white text-2xl font-semibold font-['Inter'] leading-tight mt-15 cursor-pointer hover:text-gray-200 transition-colors flex items-center gap-2"
+              onClick={handleNavigatePricing}
+            >
+              <Crown className="w-6 h-6" />
+              Upgrade to Premium
+            </div>
+          </div>
           <div className="self-stretch inline-flex justify-center items-center gap-2 relative z-20">
             <div className="flex-1 justify-start text-base-muted-foreground text-sm font-medium font-['Inter'] leading-tight">Goal Progress</div>
-            <Button variant='secondaryOutlined' className="relative z-30 pointer-events-auto" onClick={handleNavigatePricing} >See All</Button>
+            <Button variant='secondaryOutlined' className="relative z-30 pointer-events-auto">See All</Button>
           </div>
           <div className="self-stretch justify-start text-base-foreground text-3xl font-semibold font-['Inter'] leading-9">1,789,256</div>
           <div
