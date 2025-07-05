@@ -44,7 +44,7 @@ const SignUp = () => {
        // Assuming you have an ownership type in facilitiesInfo
       });
       
-      toast.error("Registered successfully!");
+      toast.success("Registered successfully!");
       navigate("/dashboard");
     } catch (error) {
       const errorMessage =
