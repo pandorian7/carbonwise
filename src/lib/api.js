@@ -2,7 +2,7 @@ import axios from "axios";
 import { getUser } from "./auth";
 import Recommendations from "@/pages/recommendations/Recommendations";
 
-console.log(import.meta.env.VITE_API_URL);
+// console.log(import.meta.env.VITE_API_URL);
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

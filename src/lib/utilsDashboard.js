@@ -137,7 +137,9 @@ export async function fetchAndStoreEmissionData() {
     saveToStorage("categoryEmissions", processedData.categoryEmissions);
     saveToStorage("totalEmissions", processedData.totalEmissions);
 
+
     console.log("Emission data processed and cached:", processedData);
+
     return data;
   } catch (error) {
     console.error("Error fetching emissions data:", error);
@@ -309,6 +311,7 @@ const processTopCategoryRecommendations = (allRecommendations) => {
   } else {
     dataCache.dashboardRecommendations = null;
   }
+
 };
 
 

@@ -13,10 +13,8 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 import useOption from "@/hooks/useOption";
 
-import ColorPill from "./ColorPill";
-import { IconButton } from "@/components/ui/Button";
-import { PlusIcon } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "@/components/ui/Button";
 
 {
   /* <div className="self-stretch inline-flex flex-col justify-start items-start">
@@ -43,22 +41,25 @@ import { useEffect } from "react";
 /**
  * @param {{ data: TableRowData[] }} props
  */
-function TableX({ data = []}) {
+function ReportTable({ data, showModel }) {
+
+
+
+
   /** @type {[TableRowData[], React.Dispatch<React.SetStateAction<TableRowData[]>>]} */
-  const [content, setContent] = React.useState(data);
+  const [content, setContent] = React.useState([]);
+
+  useEffect(()=>{
+    data().then(d=>setContent(d))
+  },[])
+
+//   console.log(content)
 
   const {
-    options: [
-      byTitle,
-      byCategory,
-      byCarbonImpact,
-      byFinancialImpact,
-      byCost,
-      byPriority,
-    ],
+    options: [byTitle, byDate],
     select: sortBy,
     active: sortedBy,
-  } = useOption(6, 1);
+  } = useOption(2, 1);
   const {
     options: [asc, desc],
     select: orderBy,
@@ -68,13 +69,7 @@ function TableX({ data = []}) {
   useEffect(() => {
     const comp = (() => {
       if (byTitle) return (r) => r.title;
-      if (byCategory) return (r) => r.category;
-      if (byCarbonImpact) return (r) => r.carbonImpact;
-      if (byFinancialImpact) return (r) => r.financialImpact;
-      if (byCost) return (r) => r.implementationCost;
-      if (byPriority)
-        return (r) =>
-          ["Low", "Medium", "High"].indexOf(r.implementationDifficulty);
+      if (byDate) return (r) => r.date;
     })();
     const ordered = [...content];
     ordered.sort((a, b) => {
@@ -114,21 +109,26 @@ function TableX({ data = []}) {
           <TableRow>
             <TableHead className="text-base-muted-foreground font-normal font-['Plus_Jakarta_Sans']">
               <div onClick={sort(1)} className="flex items-center gap-1">
-                <span>Title</span>
+                <span>Report Name</span>
                 <div className={!byTitle ? "invisible" : ""}>
                   <Arrow />
                 </div>
               </div>
             </TableHead>
-            <TableHead className="w-40 text-base-muted-foreground font-normal font-['Plus_Jakarta_Sans']">
+            <TableHead className="w-80 text-base-muted-foreground font-normal font-['Plus_Jakarta_Sans']">
               <div onClick={sort(2)} className="flex items-center gap-1">
-                <span>Category</span>
-                <div className={!byCategory ? "invisible" : ""}>
+                <span>Date Created</span>
+                <div className={!byDate ? "invisible" : ""}>
                   <Arrow />
                 </div>
               </div>
             </TableHead>
             <TableHead className="w-40 text-base-muted-foreground font-normal">
+              <div className="flex items-center gap-1">
+                <span>Details</span>
+              </div>
+            </TableHead>
+            {/* <TableHead className="w-40 text-base-muted-foreground font-normal">
               <div onClick={sort(3)} className="flex items-center gap-1">
                 <span>Carbon Impact(tCO2e/yr)</span>
                 <div className={!byCarbonImpact ? "invisible" : ""}>
@@ -164,7 +164,7 @@ function TableX({ data = []}) {
               <div className="flex items-center gap-1">
                 <span>Action</span>
               </div>
-            </TableHead>
+            </TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -174,9 +174,12 @@ function TableX({ data = []}) {
                 {row.title}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
-                {row.category}
+                {row.date}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
+                <Button variant="secondary" onClick={()=> showModel(row)}>View Details</Button>
+              </TableCell>
+              {/* <TableCell className="font-['Plus_Jakarta_Sans']">
                 {row.carbonImpact}
               </TableCell>
               <TableCell className="font-['Plus_Jakarta_Sans']">
@@ -192,7 +195,7 @@ function TableX({ data = []}) {
                 <IconButton variant="secondary" Icon={PlusIcon}>
                   Add to Plan
                 </IconButton>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>
@@ -201,4 +204,4 @@ function TableX({ data = []}) {
   );
 }
 
-export default TableX;
+export default ReportTable;

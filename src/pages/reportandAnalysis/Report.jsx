@@ -1,221 +1,64 @@
-import React, { useEffect, useRef } from "react"
-import Model, { ModelEntry, ModelEntryContainer } from "@/components/ui/model/Model";
-import { Input } from "@/components/ui/input";
-import ToggleGroup from "@/components/ui/ToggleGroup";
+import ReportModel from "@/components/Models/ReportModel";
+import ReportTable from "./ui/ReportTable";
 import api from "@/lib/api";
-import Chart from "chart.js/auto";
+import Overlay from "@/components/ui/Overlay";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { setupCarbonWiseDB, useReportsDB } from "@/hooks/useReportsDB";
 
-function Reports(){
-   const chartRef = useRef(null);
-  const chartInstance = useRef(null);
+function Reports() {
+  const overlayRef = useRef(null);
 
   useEffect(() => {
-    if (chartRef.current) {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-
-      const ctx = chartRef.current.getContext('2d');
-      chartInstance.current = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Electricity', 'Transport', 'Waste', 'Water', 'Purchased Goods', 'Others'],
-          datasets: [{
-            data: [450, 450, 450, 450, 450, 450],
-            backgroundColor: [
-              '#3B82F6', // Blue
-              '#EC4899', // Pink
-              '#F59E0B', // Orange
-              '#8B5CF6', // Purple
-              '#EAB308', // Yellow
-              '#06B6D4'  // Cyan
-            ],
-            borderWidth: 0,
-            cutout: '60%'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            },
-            tooltip: {
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              titleColor: '#fff',
-              bodyColor: '#fff',
-              borderColor: '#374151',
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return context.label + ': ' + context.parsed + ' kg CO₂e (36%)';
-                }
-              }
-            }
-          },
-          elements: {
-            arc: {
-              borderWidth: 0
-            }
-          }
-        }
-      });
-    }
-
-    return () => {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-    };
+    setupCarbonWiseDB();
   }, []);
 
+  const { getAll } = useReportsDB();
+
+  const showModel = (model) => overlayRef.current.showModel(model);
+
+  const showDataModel = (data) => showModel(<ReportModel {...data}/>)
+
+  // useEffect(()=>{
+  //   setTimeout(()=>showModel(<ReportModel title="Hello" emissoin={{energy:10, transport:20, water:30, waste:40, other:50}} recommendations={{count: 10, finantialCost: 300000, implementationCost:34234223}}/>), 1000)
+  // },[])
+
+  // api.emissionEntries.get().then((data) => console.log(data));
+  // api.recommendations.get().then((data) => console.log(data));
   return (
-    <Model title={"Q2 2025 Headquarters Assessment"} >
-      {/* Scrollable content wrapper with fixed width */}
-      
-      <div
-        style={{
-          width: "1200px",
-          maxHeight: "60vh",
-          overflowY: "auto",
-          paddingRight: "1rem"
-        }}
-      >
-        <div className="mb-6 flex-1">
-          <h3 className="text-lg font-medium mb-4">Carbon Assessment Summary:</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Estimated Carbon Footprint:</span>
-              <span className="text-lg font-semibold text-white">42.3 tonnes CO₂e/year</span>
+    <>
+      <div>
+        <div className="self-stretch px-6 pt-8 inline-flex justify-center items-center gap-6">
+          <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
+            <div className="self-stretch justify-start text-white text-xl font-semibold font-['Plus_Jakarta_Sans']">
+              Reports & Analysis
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Equivalent to:</span>
-              <span className="text-lg font-semibold text-white">$8,460 in potential energy savings</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Industry Standing:</span>
-              <span className="text-lg font-semibold text-white">15% below similar businesses in your sector</span>
+            <div className="self-stretch justify-start text-white text-sm font-normal font-['Plus_Jakarta_Sans'] leading-tight">
+              View, analyze, and share your carbon intelligence reports. Compare
+              past assessments, track progress, and generate actionable
+              insights.
             </div>
           </div>
+          {/* <div
+            data-show-left-icon="true"
+            data-show-right-icon="false"
+            data-size="default"
+            data-state="Default"
+            data-variant="Outline"
+            className="h-10 px-4 py-2 bg-base-background rounded-md outline outline-offset-[-1px] outline-lime-400 flex justify-center items-center gap-2"
+          >
+            <div className="w-4 h-4 relative overflow-hidden">
+              <div className="w-2.5 h-2.5 left-[3.33px] top-[3.33px] absolute outline-[1.33px] outline-offset-[-0.67px] outline-lime-400" />
+            </div>
+            <div className="justify-center text-lime-400 text-sm font-medium font-['Inter'] leading-tight">
+              New Calculation
+            </div>
+          </div> */}
         </div>
-
-
-        {/* Current Footprint Breakdown */}
-        <div className="mb-6 flex-1">
-          <h3 className="text-lg font-medium mb-4">Current Footprint Breakdown:</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="flex justify-center">
-            <div className="relative w-[400px] h-[400px]">
-                <canvas ref={chartRef} width="400" height="400"></canvas>
-              </div>
-            </div>
-            <div className="flex flex-col justify-center">
-              <div className="space-y-2">
-                {/* ...legend items... */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm">Electricity</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
-                    <span className="text-sm">Transport</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm">Waste</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                    <span className="text-sm">Water</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <span className="text-sm">Purchased Goods</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
-                    <span className="text-sm">Others</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-sm font-medium">450 kg CO₂e</span>
-                    <span className="text-xs text-gray-400 ml-2">36%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Financial Breakdown */}
-        <div className="mb-6 flex-1">
-          <h3 className="text-lg font-medium mb-4">Financial Breakdown:</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Annual energy cost savings:</span>
-              <span className="text-lg font-semibold">$142,500</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Maintenance cost reduction:</span>
-              <span className="text-lg font-semibold">$18,800</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Potential demand charge avoidance:</span>
-              <span className="text-lg font-semibold">$24,200</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">Total implementation cost:</span>
-              <span className="text-lg font-semibold">$325,000</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-400">ROI:</span>
-              <span className="text-lg font-semibold">45% over 5 years</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-4 justify-end mt-auto">
-          <button className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors">
-            Decline
-          </button>
-          <button className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors">
-            Accept
-          </button>
-        </div>
+        <ReportTable data={getAll} showModel={showDataModel}/>
       </div>
-    </Model>
+      <Overlay ref={overlayRef} />
+    </>
   );
 }
 export default Reports;

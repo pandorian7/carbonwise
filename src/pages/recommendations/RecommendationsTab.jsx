@@ -12,13 +12,18 @@ function Loading() {
   return (
     <div className="flex w-full h-full justify-center items-center font-['Plus_Jakarta_Sans']">
       <MoonLoader color="var(--color-lime-400)" size={50} />{" "}
-      <snap className="text-5xl ml-3">Loading</snap>
+      <span className="text-5xl ml-3">Loading</span>
     </div>
   );
 }
 function Content({ data }) {
-
-  console.log(data)
+  let immediate = [...data];
+  immediate.sort((a, b) => {
+    if (a.financialImpact > b.financialImpact) return -1;
+    if (a.financialImpact < b.financialImpact) return 1;
+    return 0;
+  });
+  immediate = immediate.slice(0, 4);
 
   return (
     <div className="self-stretch pt-4 inline-flex flex-col justify-start items-start">
@@ -33,15 +38,18 @@ function Content({ data }) {
       </div>
       <div className="w-full px-6 pb-6 inline-flex justify-start items-start gap-6 flex-wrap content-start">
         <div className="flex-1 flex flex-wrap w-full justify-between items-start gap-4">
-          <Card
-            title="Switch to LED Lighting"
-            content={{
-              carbonImapct: 45,
-              benefits: 32500,
-              paybackPerios: 7,
-              difficulty: "Low",
-            }}
-          />
+          {immediate.map((r, _) => (
+            <Card
+              key={_}
+              title={r.title}
+              content={{
+                carbonImapct: r.carbonImpact,
+                benefits: r.financialImpact,
+                implementationCost: r.implementationCost,
+                difficulty: r.implementationDifficulty,
+              }}
+            />
+          ))}
         </div>
       </div>
       <div
@@ -61,26 +69,15 @@ function Content({ data }) {
             *Based on your recent data
           </div>
         </div>
-        <div className="flex justify-start items-center gap-3">
+        {/* <div className="flex justify-start items-center gap-3">
           <Input
             type="text"
             placeholder="Search"
             className="placeholder:font-['Inter'] w-100"
           />
-        </div>
+        </div> */}
       </div>
-      <Table
-        data={[
-          {
-            title: "Led lighting rooftop",
-            category: "Energy",
-            carbonImpact: 43.5,
-            finantialImpact: 36500,
-            cost: 64500,
-            priority: "Low",
-          },
-        ]}
-      />
+      <Table data={data} />
     </div>
   );
 }

@@ -34,7 +34,6 @@ const SignUp = () => {
     
 
     try {
-      console.log(facilitiesInfo)
       await axios.post("https://carbonwise-backend-1.onrender.com/users/addUser", {
         name: formData.name,
         
